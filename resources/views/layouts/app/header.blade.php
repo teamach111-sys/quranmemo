@@ -12,6 +12,7 @@
             <flux:navbar class="-mb-px max-lg:hidden">
                 <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
+                    
                 </flux:navbar.item>
             </flux:navbar>
 
@@ -42,6 +43,7 @@
             </flux:navbar>
 
             <x-desktop-user-menu />
+            
         </flux:header>
 
         <!-- Mobile Menu -->

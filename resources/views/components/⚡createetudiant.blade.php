@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\On;
 use App\Models\Etudiant;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -65,7 +66,12 @@ new class extends Component {
         return Etudiant::all();
     }
 
- 
+    #[On('reset-message')]
+    public function resetMessage()
+    {
+        $this->message = null;
+        $this->resetValidation();
+    }
 };
 ?>
 
@@ -134,7 +140,7 @@ new class extends Component {
             <div>
                 <label class="block text-sm font-medium mb-1">Téléphone</label>
                 <input type="text" wire:model="telephone" id="telephone" class="rounded-md border w-full p-2"
-                    placeholder="Ex: 064736572">
+                    placeholder="Ex: 0678576807">
             </div>
 
             <!-- Email -->
@@ -193,13 +199,13 @@ new class extends Component {
 
         <!-- Buttons -->
         <div class="flex gap-3 pt-4">
-            <button  type="submit"
+            <button type="submit"
                 class="dark:bg-white dark:text-black dark:hover:bg-slate-100
   flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
                 Ajouter l'etudiant
             </button>
 
-            <button type="button" @click="open = false"
+            <button  type="button" @click="open = false; $wire.dispatch('reset-message')"
                 class="dark:bg-white dark:text-black dark:hover:bg-slate-100
   flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
                 Fermer
