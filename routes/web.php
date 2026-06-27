@@ -6,6 +6,8 @@ Route::view('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::livewire('etudiants', '⚡etudiants')->name('etudiants');
+    Route::livewire('createetudiant', '⚡createetudiant')->name('createetudiant');
 });
 
 require __DIR__.'/settings.php';

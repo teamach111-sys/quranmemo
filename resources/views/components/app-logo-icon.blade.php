@@ -1,2 +1,2 @@
-<img {{ $attributes->merge(['class' => 'dark:hidden']) }} src="{{ asset('logoblack3.png') }}" alt="" />
-<img {{ $attributes->merge(['class' => 'hidden dark:block']) }} src="{{ asset('logowhite3.png') }}" alt="" />
+<img {{ $attributes->merge(['class' => 'dark:hidden']) }} src="{{ asset('logoblack3.svg') }}" alt="" />
+<img {{ $attributes->merge(['class' => 'hidden dark:block']) }} src="{{ asset('logowhite3.svg') }}" alt="" />
