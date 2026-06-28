@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "ext-bcmath": "*",
         "blade-ui-kit/blade-heroicons": "^2.7",
         "codeat3/blade-phosphor-icons": "^2.4",
         "laravel/chisel": "^0.1.0",
@@ -110,6 +111,9 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "platform": {
+            "php": "8.3.31"
         }
     },
     "minimum-stability": "stable",
