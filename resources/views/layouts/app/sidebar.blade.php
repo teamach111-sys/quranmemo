@@ -23,6 +23,9 @@
                     wire:navigate>
                     {{ __('Gestion des etudiants') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="adjustments-vertical" :href="route('parametres-etablissement')" :current="request()->routeIs('parametres-etablissement')" wire:navigate>
+                    {{ __('Configuration') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
@@ -31,20 +34,23 @@
         <flux:spacer />
 
 
-
         <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
     </flux:sidebar>
 
     <!-- Mobile User Menu -->
     <flux:header class="lg:hidden">
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
-          <div class="h-20  w-full p-5 dark:text-white dark:bg-[#262626]">
-        <select name="" id="" class="p-2 border h-10 focus:outline-none border border-[#DEDEDE] dark:border-[#3E3E3E] rounded-md w-40">
-            <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">2026/2027</option>
-            <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">2024/2025</option>
-            <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">2023/2024</option>
-        </select>
-    </div>
+        <div class="h-20  w-full p-5 dark:text-white dark:bg-[#262626]">
+            <select name="" id=""
+                class="p-2 border h-10 focus:outline-none border border-[#DEDEDE] dark:border-[#3E3E3E] rounded-md w-40">
+                <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">2026/2027
+                </option>
+                <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">2024/2025
+                </option>
+                <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">2023/2024
+                </option>
+            </select>
+        </div>
 
         <flux:spacer />
 
@@ -84,7 +90,7 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
-        
+
     </flux:header>
 
     {{ $slot }}

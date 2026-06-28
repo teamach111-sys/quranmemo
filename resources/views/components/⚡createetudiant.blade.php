@@ -42,7 +42,7 @@ new class extends Component {
 
         $path = $this->photo->store('photos', 'public');
 
-        Etudiant::create([
+        \App\Models\Etudiant::create([
             'nom' => $this->nom,
             'photo' => $path,
             'prenom' => $this->prenom,
@@ -63,7 +63,7 @@ new class extends Component {
     }
     public function getAll()
     {
-        return Etudiant::all();
+        return \App\Models\Etudiant::all();
     }
 
     #[On('reset-message')]
