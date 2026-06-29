@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('annee_scolaires', function (Blueprint $table) {
+        Schema::create('programmes', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle');
-            $table->date('date_debut');
-            $table->date('date_fin');
-            $table->boolean('est_en_cours')->default(false);
+            $table->string('nom');
+            $table->text('description')->nullable();
+            $table->integer('nombre_annees');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('annee_scolaires');
+        Schema::dropIfExists('programmes');
     }
 };

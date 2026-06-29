@@ -22,5 +22,8 @@ Route::middleware(['auth', 'verified', 'can:view-etudiants'])->group(function ()
     Route::livewire('etudiants', '⚡etudiants')->name('etudiants');
 
 });
+Route::middleware(['auth', 'verified', 'can:view-programme'])->group(function () {
+    Route::livewire('programme', '⚡programme')->name('programme');
+});
 
 require __DIR__.'/settings.php';

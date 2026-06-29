@@ -16,27 +16,36 @@
         <flux:sidebar.nav>
             <flux:sidebar.group :heading="__('Platform')" class="grid">
                 @canany(['prof', 'admin', 'sec'])
-                <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
-                    wire:navigate>
-                    {{ __('Dashboard') }}
-                </flux:sidebar.item>
+                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
+                        wire:navigate>
+                        {{ __('Dashboard') }}
+                    </flux:sidebar.item>
                 @endcanany
                 @canany(['admin', 'sec'])
                     <flux:sidebar.item icon="users" :href="route('etudiants')" :current="request()->routeIs('etudiants')"
                         wire:navigate>
                         {{ __('Gestion des etudiants') }}
                     </flux:sidebar.item>
+                   
+                @endcanany
+
+                @can('view-notes')
+                    <flux:sidebar.item icon="clipboard" :href="route('notes')" :current="request()->routeIs('notes')"
+                        wire:navigate>
+                        {{ __('Notes d\'etudiants') }}
+                    </flux:sidebar.item>
+                @endcan
+                @canany(['admin', 'sec'])
+                   
+                     <flux:sidebar.item icon="map" :href="route('programme')" :current="request()->routeIs('programme')"
+                        wire:navigate>
+                        {{ __('Programme') }}
+                    </flux:sidebar.item>
                 @endcanany
                 @can(['admin'])
                     <flux:sidebar.item icon="adjustments-vertical" :href="route('parametres-etablissement')"
                         :current="request()->routeIs('parametres-etablissement')" wire:navigate>
                         {{ __('Configuration') }}
-                    </flux:sidebar.item>
-                @endcan
-                @can('view-notes')
-                    <flux:sidebar.item icon="adjustments-vertical" :href="route('notes')"
-                        :current="request()->routeIs('notes')" wire:navigate>
-                        {{ __('Notes d\'etudiants') }}
                     </flux:sidebar.item>
                 @endcan
 

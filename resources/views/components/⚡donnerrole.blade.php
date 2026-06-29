@@ -2,31 +2,25 @@
 
 use Livewire\Component;
 use App\Models\User;
-new class extends Component
-{
-    public $utilisateurliste =[];
-    public $roles =[
-        'administrateur',
-        'secretaire',
-        'professeur',
-    ];
+new class extends Component {
+    public $utilisateurliste = [];
+    public $roles = ['administrateur', 'secretaire', 'professeur'];
     public $message = null;
     public $utilisateurSelecte;
     public $roleSelecte;
-
 
     public function mount()
     {
         $this->utilisateurliste = User::all();
     }
-    public function assignerRole(){
-        if($this->utilisateurSelecte && $this->roleSelecte){
+    public function assignerRole()
+    {
+        if ($this->utilisateurSelecte && $this->roleSelecte) {
             $utilisateur = User::find($this->utilisateurSelecte);
             $utilisateur->role = $this->roleSelecte;
             $utilisateur->save();
             $this->message = 'Rôle assigné avec succès';
         }
-        
     }
     public function resetMessage()
     {
@@ -59,21 +53,22 @@ new class extends Component
 
 
     </div>
-<div class="flex  items-center gap-2 w-200">
+    <div class="flex  items-center gap-2 w-200">
         <select wire:model="utilisateurSelecte" name="utilisateur_id" id="utilisateur_select"
             class="p-2 border focus:outline-none border-[#E5E5E5] dark:border-[#3E3E3E] h-10 rounded-md w-full">
-            <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">Sélectionner un utilisateur</option>
+            <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">Sélectionner un
+                utilisateur</option>
             @foreach ($utilisateurliste as $utilisateur)
                 <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border"
                     value="{{ $utilisateur->id }}">
-                    {{ $utilisateur->name }}
-                </option>
+                   {{ $utilisateur->name }}-<span class="text-gray-400 dark:text-gray-600">({{ $utilisateur->role }})</span>
             @endforeach
         </select>
 
         <select wire:model="roleSelecte" name="role_id" id="role_select"
             class="p-2 border focus:outline-none border-[#E5E5E5] dark:border-[#3E3E3E] h-10 rounded-md w-full">
-            <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">Sélectionner un rôle</option>
+            <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">Sélectionner un
+                rôle</option>
             @foreach ($roles as $role)
                 <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border"
                     value="{{ $role }}">
@@ -82,11 +77,11 @@ new class extends Component
             @endforeach
         </select>
 
-        
 
-</div>
-<Button wire:click="assignerRole"
-            class="my-5 flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-uiw-check
-                class="w-5 h-5" />Assigner le Rôle</Button>
+
+    </div>
+    <Button wire:click="assignerRole"
+        class="my-5 flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-uiw-check
+            class="w-5 h-5" />Assigner le Rôle</Button>
 
 </div>

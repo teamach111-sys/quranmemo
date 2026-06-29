@@ -44,6 +44,9 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Gate::define('view-etudiants', function (\App\Models\User $user) {
             return in_array($user->role, ['administrateur', 'secretaire']);
         });
+         \Illuminate\Support\Facades\Gate::define('view-programme', function (\App\Models\User $user) {
+            return in_array($user->role, ['administrateur', 'secretaire']);
+        });
     }
 
     /**

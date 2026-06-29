@@ -1,42 +1,30 @@
 <?php
 
 use Livewire\Component;
-use App\Models\Etudiant;
-use Livewire\Attributes\On;
-use Livewire\WithPagination;
-use Livewire\WithoutUrlPagination;
 
-new class extends Component {
-    use WithPagination, WithoutUrlPagination;
+new class extends Component
+{
 
-    #[On('refreshparent')]
-    public function refreshEtudiants()
+   
+  #[\Livewire\Attributes\On('refreshtable')]
+   public function render()
     {
-        $this->resetPage();
-    }
-    
-    public function render()
-    {
-        return view('⚡etudianttable', [
-            'etudiants' => Etudiant::orderBy('id', 'desc')->paginate(12),
+        return view('⚡tableprogramme', [
+            'programmes' => \App\Models\Programme::orderBy('id', 'desc')->paginate(12),
         ]);
     }
-    public function destroy(Etudiant $etudiant)
-    {
-        $etudiant->delete();
 
-        return redirect()->back()->with('message', 'deleted successfully');
+    public function destroy(\App\Models\Programme $programme){
+        $programme->delete();
     }
 };
 ?>
 
 <div>
-    <!-- Table -->
-    <div class="min-w-full">
+ <div class="min-w-full">
         <div
             class="border border-gray-200 dark:border-neutral-700 rounded-lg overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-none [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
             <div class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700 flex items-center justify-between">
-                <!-- Header -->
                 <div class="relative max-w-xs">
                     <label for="hs-table-search" class="sr-only">Recherche</label>
                     <input type="text" name="hs-table-search" id="hs-table-search"
@@ -50,28 +38,9 @@ new class extends Component {
                             <path d="m21 21-4.3-4.3" />
                         </svg>
                     </div>
-
-
                 </div>
-                <div x-data="{ open: false }" class="flex gap-2">
-                  
-                    <button
-                        class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-phosphor-export class="w-5 h-5" />Exporter</button>
-
-                    <Button @click="open = true"
-                        class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-phosphor-student class="w-5 h-5" />Nouveau
-                        etudiant</Button>
-                    <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                        <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
-                            @click.outside="open = false; $wire.dispatch('reset-message')">
-                            <livewire:createetudiant />
-                        </div>
-                    </div>
-
-                </div>
-
+                
             </div>
-            <!-- End Header -->
 
             <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                 <thead class="bg-gray-50 dark:bg-neutral-800">
@@ -88,23 +57,17 @@ new class extends Component {
                             Nom</th>
                         <th scope="col"
                             class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Prénom</th>
+                            Description</th>
                         <th scope="col"
                             class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Sexe</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Date de naissance</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Téléphone</th>
+                            Nombre d'années</th>
                         <th scope="col"
                             class="px-6 py-3 text-end text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    @forelse ($etudiants as $etudiant)
+                    @forelse ($programmes as $programme)
                         <tr>
                             <td class="py-3 ps-4">
                                 <div class="flex items-center h-5">
@@ -115,39 +78,29 @@ new class extends Component {
                             </td>
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
-                                {{ $etudiant->nom }}</td>
+                                {{ $programme->nom }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $etudiant->prenom }}</td>
+                                {{ $programme->description }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $etudiant->sexe }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $etudiant->date_naissance }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $etudiant->telephone }}</td>
+                                {{ $programme->nombre_annees }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                <button type="button" wire:click="destroy({{ $etudiant }})"
+                                <button type="button" wire:click="destroy({{ $programme->id }})"
                                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7"
+                            <td colspan="5"
                                 class="px-6 py-4 text-center text-sm text-gray-800 dark:text-neutral-200">
-                                Aucun étudiant trouvé
+                                Aucun programme trouvé
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-
-
         </div>
     </div>
     <div class="mt-2">
-        {{ $etudiants->links() }}
-
-
+        {{ $programmes->links() }}
     </div>
-
-    <!-- End Table -->
 </div>
