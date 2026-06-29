@@ -24,6 +24,26 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        \Illuminate\Support\Facades\Gate::define('admin', function (\App\Models\User $user) {
+            return in_array($user->role, ['administrateur']);
+        });
+
+        \Illuminate\Support\Facades\Gate::define('sec', function (\App\Models\User $user) {
+            return in_array($user->role, ['administrateur', 'secretaire']);
+        });
+
+        \Illuminate\Support\Facades\Gate::define('prof', function (\App\Models\User $user) {
+            return $user->role === 'professeur';
+        });
+
+        \Illuminate\Support\Facades\Gate::define('view-notes', function (\App\Models\User $user) {
+            return in_array($user->role, ['administrateur', 'secretaire', 'professeur']);
+        });
+
+        \Illuminate\Support\Facades\Gate::define('view-etudiants', function (\App\Models\User $user) {
+            return in_array($user->role, ['administrateur', 'secretaire']);
+        });
     }
 
     /**
