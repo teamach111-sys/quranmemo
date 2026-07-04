@@ -5,7 +5,8 @@ use Livewire\Component;
 new class extends Component
 {
 
-   
+       public string $recherche = '';
+
   #[\Livewire\Attributes\On('refreshtable')]
    public function render()
     {
@@ -17,6 +18,13 @@ new class extends Component
     public function destroy(\App\Models\Programme $programme){
         $programme->delete();
     }
+     #[\Livewire\Attributes\Computed]
+    public function programmes(){
+        return \App\Models\Programme::orderBy('id', 'desc')->where('nom', 'like', "%{$this->recherche}%")
+            ->orWhere('nombre_annees', 'like', "%{$this->recherche}%")
+            ->paginate(12);
+    }
+    
 };
 ?>
 
@@ -29,7 +37,7 @@ new class extends Component
                     <label for="hs-table-search" class="sr-only">Recherche</label>
                     <input type="text" name="hs-table-search" id="hs-table-search"
                         class="py-1.5 sm:py-2 px-3 ps-9 block w-full h-10 bg-white dark:bg-neutral-800 border-gray-200 dark:border-neutral-700 shadow-2xs rounded-lg sm:text-sm text-gray-800 dark:text-neutral-200 placeholder:text-gray-500 dark:placeholder:text-neutral-400 focus:z-10 focus:border-gray-900 dark:focus:border-neutral-300 focus:ring-gray-900 dark:focus:ring-neutral-300 disabled:opacity-50 disabled:pointer-events-none"
-                        placeholder="Rechercher des éléments">
+                        placeholder="Rechercher des éléments" wire:model.live="recherche">
                     <div class="absolute inset-y-0 inset-s-0 flex items-center pointer-events-none ps-3">
                         <svg class="size-4 text-gray-400 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -67,7 +75,7 @@ new class extends Component
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    @forelse ($programmes as $programme)
+                    @forelse ($this->programmes as $programme)
                         <tr>
                             <td class="py-3 ps-4">
                                 <div class="flex items-center h-5">
