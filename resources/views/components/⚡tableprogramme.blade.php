@@ -47,7 +47,24 @@ new class extends Component
                         </svg>
                     </div>
                 </div>
-                
+                   <div x-data="{ open: false }" class="flex gap-2">
+
+                    <button
+                        class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-phosphor-export
+                            class="w-5 h-5" />Exporter</button>
+
+                    <Button @click="open = true"
+                        class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center">
+                           
+                       <x-codicon-add class="h-5 w-5" /> Ajouter un Programme</Button>
+                    <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                        <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
+                            @click.outside="open = false; $wire.dispatch('reset-message')">
+                            <livewire:createprogramme />
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
             <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">

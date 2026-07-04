@@ -41,8 +41,7 @@ new class extends Component
 ?>
 
 <div>
-    <h1 class="font-medium text-[18px] my-3">Ajouter un programme </h1>
-    <div class="w-200 my-3">
+    <div class="w-full ">
         @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                 <strong>Erreur!</strong>
@@ -64,7 +63,7 @@ new class extends Component
     </div>
     <form wire:submit.prevent="store">
     @csrf
-        <div class="grid grid-cols-2 w-200 gap-4">
+        <div class="grid grid-cols-2 w-full gap-4">
             <div>
                 <label class="block text-sm font-medium mb-1">Nom</label>
                 <input type="text" wire:model="nom" id="nom" class="rounded-md border w-full p-2"

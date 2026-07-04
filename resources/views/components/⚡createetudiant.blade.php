@@ -3,7 +3,6 @@
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\On;
-use App\Models\Etudiant;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 new class extends Component {
@@ -123,9 +122,9 @@ new class extends Component {
             <div>
                 <label class="block text-sm font-medium mb-1">Sexe</label>
                 <select wire:model="sexe" id="sexe" class="rounded-md border w-full p-2">
-                    <option value="">Sélectionnez le sexe</option>
-                    <option value="M">Masculin</option>
-                    <option value="F">Féminin</option>
+                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="">Sélectionnez le sexe</option>
+                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="M">Masculin</option>
+                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="F">Féminin</option>
                 </select>
             </div>
 
@@ -133,7 +132,7 @@ new class extends Component {
             <div>
                 <label class="block text-sm font-medium mb-1">Date de naissance</label>
                 <input type="date" wire:model="date_naissance" id="date_naissance"
-                    class="rounded-md border w-full p-2">
+                    class="rounded-md border w-full p-2 ">
             </div>
 
             <!-- Telephone -->
@@ -187,11 +186,11 @@ new class extends Component {
                 <div>
                     <label class="block text-sm font-medium mb-1">Relation avec le parent</label>
                     <select wire:model="parent_relation" id="parent_relation" class="rounded-md border w-full p-2">
-                        <option value="">Sélectionnez la relation</option>
-                        <option value="mere">Mère</option>
-                        <option value="pere">Père</option>
-                        <option value="tuteur">Tuteur</option>
-                        <option value="autre">Autre</option>
+                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="">Sélectionnez la relation</option>
+                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="mere">Mère</option>
+                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="pere">Père</option>
+                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="tuteur">Tuteur</option>
+                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="autre">Autre</option>
                     </select>
                 </div>
             </div>

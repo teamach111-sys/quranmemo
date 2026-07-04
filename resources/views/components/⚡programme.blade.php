@@ -14,7 +14,7 @@ new class extends Component {
 
         <div class="flex  justify-between gap-4 items-center">
 
-            <h1 class="font-bold text-[20px] ">Programme</h1>
+            <h1 class="font-bold text-[20px] ">Programmes</h1>
 
 
             <div class="flex gap-2 ">
@@ -25,9 +25,7 @@ new class extends Component {
 
     </div>
 
-    <div class="mt-5">
-        <livewire:createprogramme />
-    </div>
+    
     <div class="mt-5">
         <livewire:tableprogramme />
     </div>
