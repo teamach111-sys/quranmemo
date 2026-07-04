@@ -2,34 +2,34 @@
 
 use Livewire\Component;
 
-new class extends Component
-{
+new class extends Component {
+    public string $recherche = '';
 
-       public string $recherche = '';
-
-  #[\Livewire\Attributes\On('refreshtable')]
-   public function render()
+    #[\Livewire\Attributes\On('refreshtable')]
+    public function render()
     {
         return view('⚡tableprogramme', [
             'programmes' => \App\Models\Programme::orderBy('id', 'desc')->paginate(12),
         ]);
     }
 
-    public function destroy(\App\Models\Programme $programme){
+    public function destroy(\App\Models\Programme $programme)
+    {
         $programme->delete();
     }
-     #[\Livewire\Attributes\Computed]
-    public function programmes(){
-        return \App\Models\Programme::orderBy('id', 'desc')->where('nom', 'like', "%{$this->recherche}%")
+    #[\Livewire\Attributes\Computed]
+    public function programmes()
+    {
+        return \App\Models\Programme::orderBy('id', 'desc')
+            ->where('nom', 'like', "%{$this->recherche}%")
             ->orWhere('nombre_annees', 'like', "%{$this->recherche}%")
             ->paginate(12);
     }
-    
 };
 ?>
 
 <div>
- <div class="min-w-full">
+    <div class="min-w-full">
         <div
             class="border border-gray-200 dark:border-neutral-700 rounded-lg overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-none [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
             <div class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700 flex items-center justify-between">
@@ -47,7 +47,7 @@ new class extends Component
                         </svg>
                     </div>
                 </div>
-                   <div x-data="{ open: false }" class="flex gap-2">
+                <div x-data="{ open: false }" class="flex gap-2">
 
                     <button
                         class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-phosphor-export
@@ -55,12 +55,26 @@ new class extends Component
 
                     <Button @click="open = true"
                         class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center">
-                           
-                       <x-codicon-add class="h-5 w-5" /> Ajouter un Programme</Button>
+
+                        <x-codicon-add class="h-5 w-5" /> Ajouter un Programme</Button>
                     <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                         <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
                             @click.outside="open = false; $wire.dispatch('reset-message')">
                             <livewire:createprogramme />
+                        </div>
+                    </div>
+                    <div x-data="{ openClasse: false }" class="flex gap-2">
+
+                        <Button @click="openClasse = true"
+                            class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center">
+
+                            <x-codicon-add class="h-5 w-5" /> Ajouter une classe</Button>
+                        <div x-show="openClasse" x-cloak
+                            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                            <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
+                                @click.outside="openClasse = false; $wire.dispatch('reset-message')">
+                                <livewire:createclasse />
+                            </div>
                         </div>
                     </div>
 
@@ -78,16 +92,19 @@ new class extends Component
                             </div>
                         </th>
                         <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Nom</th>
                         <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Description</th>
                         <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Nombre d'années</th>
                         <th scope="col"
-                            class="px-6 py-3 text-end text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            Classes</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Action</th>
                     </tr>
                 </thead>
@@ -102,16 +119,24 @@ new class extends Component
                                 </div>
                             </td>
                             <td
-                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-800 dark:text-neutral-200">
                                 {{ $programme->nom }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $programme->description }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $programme->nombre_annees }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
+                               @foreach($programme->classe as $classe)
+                               <p>{{ $classe->nom }}</p>
+                               @endforeach
+                            
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex justify-center gap-4 items-center">
                                 <button type="button" wire:click="destroy({{ $programme->id }})"
                                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
-                            </td>
+                                <button type="button" wire:click="destroy({{ $programme->id }})"
+                                    class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Imprimer l'emploit du temps</button>
+                                </td>
                         </tr>
                     @empty
                         <tr>

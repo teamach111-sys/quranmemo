@@ -95,22 +95,22 @@ new class extends Component {
                             </div>
                         </th>
                         <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Nom</th>
                         <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Prénom</th>
                         <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Sexe</th>
                         <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Date de naissance</th>
                         <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Téléphone</th>
                         <th scope="col"
-                            class="px-6 py-3 text-end text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Action</th>
                     </tr>
                 </thead>
@@ -125,17 +125,17 @@ new class extends Component {
                                 </div>
                             </td>
                             <td
-                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-800 dark:text-neutral-200">
                                 {{ $etudiant->nom }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $etudiant->prenom }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $etudiant->sexe }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $etudiant->date_naissance }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $etudiant->telephone }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex justify-center gap-4 items-center">
                                 <button type="button" wire:click="destroy({{ $etudiant }})"
                                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
                             </td>

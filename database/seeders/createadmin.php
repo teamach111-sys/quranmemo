@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
-class createadmin extends \Illuminate\Database\Seeder
+class createadmin extends Seeder
 {
     public function run()
     {
@@ -13,6 +14,12 @@ class createadmin extends \Illuminate\Database\Seeder
             'email' => 'admin@muslim.com',
             'password' => bcrypt('GsuDNt5E.bk:R4Q'),
             'role' => 'administrateur',
+        ]);
+        User::create([
+            'name' => 'muslim2',
+            'email' => 'admin2@muslim.com',
+            'password' => bcrypt('GsuDNt5E.bk:R4Q'),
+            'role' => 'professeur',
         ]);
     }
 }
