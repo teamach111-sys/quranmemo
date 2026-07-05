@@ -77,7 +77,7 @@ new class extends Component {
             <div>
                 <label class="block text-sm font-medium mb-1">Nom</label>
                 <input type="text" wire:model="nom" id="nom" class="rounded-md border w-full p-2"
-                    placeholder="Ex: 1A, Seconde....">
+                    placeholder="Gestion de production...">
             </div>
 
             <div>
