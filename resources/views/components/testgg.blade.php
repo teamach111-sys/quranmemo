@@ -4,7 +4,8 @@ use Livewire\Component;
 
 new class extends Component {
     public string $recherche = '';
-
+    
+    
     #[\Livewire\Attributes\On('refreshtable')]
     public function render()
     {
@@ -54,7 +55,7 @@ new class extends Component {
                             class="w-5 h-5" />Exporter</button>
 
                     <Button @click="open = true"
-                        class="flex items-center gap-2 cursor-pointer h-10 bg-gg hover:bg-[#3B3B3B] dark:bg-gg dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center">
+                        class="flex items-center gap-2 cursor-pointer h-10 bg-gg hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center">
 
                         <x-codicon-add class="h-5 w-5" /> Ajouter une Filière</Button>
                     <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -63,12 +64,12 @@ new class extends Component {
                             <livewire:createprogramme />
                         </div>
                     </div>
-
+                    
 
                 </div>
             </div>
 
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+            <table  class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                 <thead class="bg-gray-50 dark:bg-neutral-800">
                     <tr>
                         <th scope="col" class="py-3 px-4 pe-0">
@@ -133,7 +134,7 @@ new class extends Component {
                                 </div>
                             </td>
                         </tr>
-
+                     
 
                     @empty
                         <tr>
@@ -144,13 +145,14 @@ new class extends Component {
                         </tr>
                     @endforelse
                 </tbody>
-
+               
             </table>
         </div>
     </div>
 
     <!-- Modal open4 -->
-    <div x-show="open4" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div x-show="open4" x-cloak
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
             @click.outside="open4 = false; $wire.dispatch('reset-message')">
             <livewire:filieregerer />

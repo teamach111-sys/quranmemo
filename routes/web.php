@@ -20,10 +20,12 @@ Route::middleware(['auth', 'verified', 'can:admin'])->group(function () {
 Route::middleware(['auth', 'verified', 'can:view-etudiants'])->group(function () {
     Route::livewire('createetudiant', '⚡createetudiant')->name('createetudiant');
     Route::livewire('etudiants', '⚡etudiants')->name('etudiants');
+    Route::livewire('/filieregerer/{programme}', '⚡filieregerer')->name('filiere');
+    Route::livewire('/matieregerer/{niveau}', '⚡matieregerer')->name('matiere');
 
 });
 Route::middleware(['auth', 'verified', 'can:view-programme'])->group(function () {
-    Route::livewire('programmes', '⚡programme')->name('programme');
+    Route::livewire('filieres', '⚡programme')->name('programme');
 });
 
 require __DIR__.'/settings.php';

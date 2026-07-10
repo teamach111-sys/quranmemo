@@ -3,36 +3,51 @@
 use Livewire\Component;
 
 new class extends Component {
-    public string $recherche = '';
+    public $recherche = '';
+    public $niveauid;
+    public $niveau;
 
-    #[\Livewire\Attributes\On('refreshtable')]
+    public function mount(\App\Models\Niveau $niveau)
+    {
+        $this->niveauid = $niveau->id;
+        $this->niveau = $niveau;
+    }
+
+    #[\Livewire\Attributes\On('refresh-table2')]
     public function render()
     {
-        return view('⚡tableprogramme', [
-            'programmes' => \App\Models\Programme::orderBy('id', 'desc')->paginate(12),
+        return view('⚡tablematiere', [
+            'matieres' => \App\Models\Matiere::where('niveau_id', $this->niveauid)
+                ->where('nom', 'LIKE', '%' . $this->recherche . '%')
+                ->paginate(12),
         ]);
     }
 
-    public function destroy(\App\Models\Programme $programme)
+    public function destroy(\App\Models\Matiere $matiere)
     {
-        $programme->delete();
-    }
-    #[\Livewire\Attributes\Computed]
-    public function programmes()
-    {
-        return \App\Models\Programme::orderBy('id', 'desc')
-            ->where('nom', 'like', "%{$this->recherche}%")
-            ->orWhere('nombre_annees', 'like', "%{$this->recherche}%")
-            ->paginate(12);
+        $matiere->delete();
     }
 };
 ?>
 
-<div x-data="{ open4: false }">
+<x-slot:title>
+    {{ __('Ajouter une matière') }}
+</x-slot:title>
+<div>
+
+
+    <h1 class="font-bold text-[20px] mb-3 ">{{ $niveau->nom }}
+    </h1>
+
+
+
+
+    <!-- Table -->
     <div class="min-w-full">
         <div
             class="border border-gray-200 dark:border-neutral-700 rounded-lg overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-none [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
             <div class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700 flex items-center justify-between">
+                <!-- Header -->
                 <div class="relative max-w-xs">
                     <label for="hs-table-search" class="sr-only">Recherche</label>
                     <input type="text" name="hs-table-search" id="hs-table-search"
@@ -46,6 +61,8 @@ new class extends Component {
                             <path d="m21 21-4.3-4.3" />
                         </svg>
                     </div>
+
+
                 </div>
                 <div x-data="{ open: false }" class="flex gap-2">
 
@@ -54,19 +71,20 @@ new class extends Component {
                             class="w-5 h-5" />Exporter</button>
 
                     <Button @click="open = true"
-                        class="flex items-center gap-2 cursor-pointer h-10 bg-gg hover:bg-[#3B3B3B] dark:bg-gg dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center">
-
-                        <x-codicon-add class="h-5 w-5" /> Ajouter une Filière</Button>
+                        class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-phosphor-student
+                            class="w-5 h-5" />
+                        Ajouter une matière</Button>
                     <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                         <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
                             @click.outside="open = false; $wire.dispatch('reset-message')">
-                            <livewire:createprogramme />
+                            <livewire:creatematiere :niveau="$niveau" />
                         </div>
                     </div>
 
-
                 </div>
+
             </div>
+            <!-- End Header -->
 
             <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                 <thead class="bg-gray-50 dark:bg-neutral-800">
@@ -86,19 +104,16 @@ new class extends Component {
                             Description</th>
                         <th scope="col"
                             class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Nombre d'années</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Classes</th>
+                            Année d'étude</th>
 
                         <th scope="col"
                             class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Action</th>
                     </tr>
                 </thead>
-                <tbody x-data="{ open3: false }" class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    @forelse ($this->programmes as $programme)
-                        <tr>
+                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                    @forelse ($matieres as $item)
+                        <tr wire:key="niveau-{{ $item->id }}">
                             <td class="py-3 ps-4">
                                 <div class="flex items-center h-5">
                                     <input type="checkbox"
@@ -108,55 +123,42 @@ new class extends Component {
                             </td>
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-800 dark:text-neutral-200">
-                                {{ $programme->nom }}</td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $programme->description }}</td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $programme->nombre_annees }}</td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
-                                @foreach ($programme->classe as $classe)
-                                    <p>{{ $classe->nom }}</p>
-                                @endforeach
-
+                                <span>{{ $item->nom }}</span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                <div class="flex justify-center gap-4 items-center">
-                                    <a wire:navigate href="{{ route('filiere', $programme->id) }}">
-                                        Gérer
-                                    </a>
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
+                                {{ $item->description }}</td>
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
+                                {{ $item->annee_etude }}</td>
 
-                                    <button type="button" wire:click="destroy({{ $programme->id }})"
-                                        class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
-                                </div>
+
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex justify-center gap-4 items-center">
+                                <button type="button" wire:click="destroy({{ $item->id }})"
+                                    class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
+
                             </td>
                         </tr>
-
-
                     @empty
                         <tr>
-                            <td colspan="5"
+                            <td colspan="7"
                                 class="px-6 py-4 text-center text-sm text-gray-800 dark:text-neutral-200">
-                                Aucune Filière trouvé
-                            </td>
+                                Aucun niveau trouvé</td>
                         </tr>
                     @endforelse
                 </tbody>
-
             </table>
+
+        </div>
+        <div class="mt-2">
+            {{ $matieres->links() }}
+
+
         </div>
     </div>
 
-    <!-- Modal open4 -->
-    <div x-show="open4" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
-            @click.outside="open4 = false; $wire.dispatch('reset-message')">
-            <livewire:filieregerer />
-        </div>
-    </div>
-    <div class="mt-2">
-        {{ $programmes->links() }}
-    </div>
+
+
+
 </div>

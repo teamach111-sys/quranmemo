@@ -39,7 +39,7 @@
                    
                      <flux:sidebar.item icon="map" :href="route('programme')" :current="request()->routeIs('programme')"
                         wire:navigate>
-                        {{ __('Programmes') }}
+                        {{ __('Filières') }}
                     </flux:sidebar.item>
                 @endcanany
                 @can(['admin'])
