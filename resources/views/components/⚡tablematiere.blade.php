@@ -6,7 +6,6 @@ new class extends Component {
     public $recherche = '';
     public $niveauid;
     public $niveau;
-
     public function mount(\App\Models\Niveau $niveau)
     {
         $this->niveauid = $niveau->id;
@@ -86,67 +85,33 @@ new class extends Component {
             </div>
             <!-- End Header -->
 
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+            <table class="w-full table-fixed divide-y divide-gray-200 dark:divide-neutral-700">
                 <thead class="bg-gray-50 dark:bg-neutral-800">
-                    <tr>
-                        <th scope="col" class="py-3 px-4 pe-0">
-                            <div class="flex items-center h-5">
-                                <input id="hs-table-search-checkbox-all" type="checkbox"
-                                    class="shrink-0 size-4 bg-transparent border-gray-300 dark:border-neutral-600 rounded-sm shadow-2xs text-gray-800 dark:text-white focus:ring-0 focus:ring-offset-0 checked:bg-gray-800 dark:checked:bg-white checked:border-gray-800 dark:checked:border-white disabled:opacity-50 disabled:pointer-events-none">
-                                <label for="hs-table-search-checkbox-all" class="sr-only">Case à cocher</label>
-                            </div>
-                        </th>
-                        <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Nom</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Description</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Année d'étude</th>
-
-                        <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Action</th>
+                    <tr class="divide-x divide-gray-200 dark:divide-neutral-700">
+                        @for ($i = 1; $i <= $niveau->nombre_annees; $i++)
+                            <th scope="col"
+                                class="px-6 py-3 text-center  text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                {{ $i }} {{ $i == 1 ? 'ère année' : 'ème année' }}
+                            </th>
+                        @endfor
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    @forelse ($matieres as $item)
-                        <tr wire:key="niveau-{{ $item->id }}">
-                            <td class="py-3 ps-4">
-                                <div class="flex items-center h-5">
-                                    <input type="checkbox"
-                                        class="shrink-0 size-4 bg-transparent border-gray-300 dark:border-neutral-600 rounded-sm shadow-2xs text-gray-800 dark:text-white focus:ring-0 focus:ring-offset-0 checked:bg-gray-800 dark:checked:bg-white checked:border-gray-800 dark:checked:border-white disabled:opacity-50 disabled:pointer-events-none">
-                                    <label class="sr-only">Case à cocher</label>
-                                </div>
+                    <tr class="divide-x divide-gray-200 dark:divide-neutral-700">
+                        @for ($i = 1; $i <= $niveau->nombre_annees; $i++)
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-800 dark:text-neutral-200 align-top">
+                                @forelse ($matieres->groupBy('annee_etude')->get($i, collect()) as $matiere)
+                                    <div class="py-2    ">{{ $matiere->nom }}</div>
+                                @empty
+                                    <span
+                                        class="px-6 py-3 text-center  text-sm font-medium text-gray-800 dark:text-neutral-200">Aucune
+                                        matière trouvée
+                                    </span>
+                                @endforelse
                             </td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-800 dark:text-neutral-200">
-                                <span>{{ $item->nom }}</span>
-                            </td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $item->description }}</td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $item->annee_etude }}</td>
-
-
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex justify-center gap-4 items-center">
-                                <button type="button" wire:click="destroy({{ $item->id }})"
-                                    class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
-
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7"
-                                class="px-6 py-4 text-center text-sm text-gray-800 dark:text-neutral-200">
-                                Aucun niveau trouvé</td>
-                        </tr>
-                    @endforelse
+                        @endfor
+                    </tr>
                 </tbody>
             </table>
 
