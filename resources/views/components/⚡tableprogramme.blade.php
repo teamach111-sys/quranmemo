@@ -84,9 +84,7 @@ new class extends Component {
                         <th scope="col"
                             class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Nombre d'années</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Classes</th>
+                       
 
                         <th scope="col"
                             class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
@@ -112,13 +110,7 @@ new class extends Component {
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $programme->nombre_annees }}</td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
-                                @foreach ($programme->classe as $classe)
-                                    <p>{{ $classe->nom }}</p>
-                                @endforeach
-
-                            </td>
+                          
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                 <div class="flex justify-center gap-4 items-center">
                                     <a wire:navigate href="{{ route('filiere', $programme->id) }}">
