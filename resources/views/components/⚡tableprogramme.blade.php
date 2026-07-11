@@ -13,10 +13,7 @@ new class extends Component {
         ]);
     }
 
-    public function destroy(\App\Models\Programme $programme)
-    {
-        $programme->delete();
-    }
+    
     #[\Livewire\Attributes\Computed]
     public function programmes()
     {
@@ -127,9 +124,17 @@ new class extends Component {
                                     <a wire:navigate href="{{ route('filiere', $programme->id) }}">
                                         Gérer
                                     </a>
-
-                                    <button type="button" wire:click="destroy({{ $programme->id }})"
+                                   <div x-data="{ open: false }">
+                                     <button type="button"  @click="open = true"
                                         class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
+                                    <div x-show="open" x-cloak id="modalOverlay"
+                                        class="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)]">
+                                        <livewire:suppmodal :item="$programme" />
+                                    </div>
+                                   </div>
+                                  
+
+                                    
                                 </div>
                             </td>
                         </tr>
@@ -149,13 +154,6 @@ new class extends Component {
         </div>
     </div>
 
-    <!-- Modal open4 -->
-    <div x-show="open4" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
-            @click.outside="open4 = false; $wire.dispatch('reset-message')">
-            <livewire:filieregerer />
-        </div>
-    </div>
     <div class="mt-2">
         {{ $programmes->links() }}
     </div>

@@ -73,7 +73,7 @@ new class extends Component {
 };
 ?>
 <x-slot:title>
-    {{ __('Ajouter un Niveau') }}
+    {{ __('Gérer les niveaux') }}
 </x-slot:title>
 <div>
 
