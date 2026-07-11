@@ -112,7 +112,6 @@ new class extends Component {
         </button>
     </form>
     
-   <livewire:supprimerannee />
 
 
 

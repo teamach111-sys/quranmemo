@@ -30,6 +30,10 @@ new class extends Component {
     <div class="mt-5">
         <livewire:createannee />
     </div>
+      <div class="mt-5">
+       <livewire:supprimerannee />
+    </div>
+
     <div class="mt-5">
         <livewire:donnerrole />
     </div>
