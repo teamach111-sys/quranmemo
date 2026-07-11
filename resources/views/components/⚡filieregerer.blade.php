@@ -174,7 +174,7 @@ new class extends Component {
                                     gérer les matières
 
                                 </a>
-                                <div x-data="{ open: false }" >
+                                <div x-data="{ open: false }">
                                     <button type="button" @click="open = true"
                                         class="cursor-pointer inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
                                     <div x-show="open" x-cloak id="modalOverlay"

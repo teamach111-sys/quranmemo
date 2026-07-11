@@ -26,7 +26,6 @@
                         wire:navigate>
                         {{ __('Gestion des etudiants') }}
                     </flux:sidebar.item>
-                   
                 @endcanany
 
                 @can('view-notes')
@@ -36,8 +35,7 @@
                     </flux:sidebar.item>
                 @endcan
                 @canany(['admin', 'sec'])
-                   
-                     <flux:sidebar.item icon="map" :href="route('programme')" :current="request()->routeIs('programme')"
+                    <flux:sidebar.item icon="map" :href="route('programme')" :current="request()->routeIs('programme')"
                         wire:navigate>
                         {{ __('Filières') }}
                     </flux:sidebar.item>

@@ -14,12 +14,10 @@ new class extends Component {
     {
         return view('⚡tableprogramme', [
             'programmes' => \App\Models\Programme::orderBy('id', 'desc')
-            ->where('nom', 'like', "%{$this->recherche}%")
-            ->paginate(12),
+                ->where('nom', 'like', "%{$this->recherche}%")
+                ->paginate(12),
         ]);
     }
-
-    
 };
 ?>
 
@@ -79,7 +77,7 @@ new class extends Component {
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Description</th>
-                     
+
 
 
                         <th scope="col"
@@ -103,14 +101,14 @@ new class extends Component {
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-left text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $programme->description }}</td>
-                          
+
 
                             <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                                 <div class="flex justify-start gap-4 items-center">
                                     <a wire:navigate href="{{ route('filiere', $programme->id) }}">
                                         Gérer
                                     </a>
-                                    <div x-data="{ open: false }" >
+                                    <div x-data="{ open: false }">
                                         <button type="button" @click="open = true"
                                             class="cursor-pointer inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
                                         <div x-show="open" x-cloak id="modalOverlay"
@@ -128,8 +126,7 @@ new class extends Component {
 
                     @empty
                         <tr>
-                            <td colspan="5"
-                                class="px-6 py-4 text-left text-sm text-gray-800 dark:text-neutral-200">
+                            <td colspan="5" class="px-6 py-4 text-left text-sm text-gray-800 dark:text-neutral-200">
                                 Aucune Filière trouvé
                             </td>
                         </tr>
