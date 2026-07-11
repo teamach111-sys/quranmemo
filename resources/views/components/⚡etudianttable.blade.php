@@ -15,7 +15,7 @@ new class extends Component {
     {
         $this->resetPage();
     }
-
+ 
     public function render()
     {
         return view('⚡etudianttable', [
@@ -136,8 +136,14 @@ new class extends Component {
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $etudiant->telephone }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex justify-center gap-4 items-center">
-                                <button type="button" wire:click="destroy({{ $etudiant }})"
-                                    class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
+                                  <div x-data="{ open: false }" >
+                                    <button type="button" @click="open = true"
+                                        class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
+                                    <div x-show="open" x-cloak id="modalOverlay"
+                                        class="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)]">
+                                        <livewire:suppmodal :item="$etudiant" />
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     @empty

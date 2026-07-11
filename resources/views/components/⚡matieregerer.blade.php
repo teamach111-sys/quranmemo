@@ -17,7 +17,7 @@ new class extends Component
 };
 ?>
 
-<div>
+<div >
     <livewire:tablematiere :niveau="$niveau" />
 
 </div>

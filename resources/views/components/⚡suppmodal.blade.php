@@ -17,11 +17,14 @@ new class extends Component {
     {
         $this->item->delete();
         $this->dispatch('refreshtable');
+        $this->dispatch('refreshniveaux');
+        $this->dispatch('refreshparent');
+        
     }
 };
 ?>
 
-    <div role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1"
+    <div role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1" @click.outside="open = false"
         class="w-full max-w-lg mx-auto whitespace-normal bg-white border border-slate-100 shadow-lg rounded-lg relative max-h-[95vh] overflow-y-auto outline-none p-4 md:p-6 dark:bg-neutral-800 dark:border-neutral-700">
 
         <button type="button" id="closeModal" aria-label="Close modal"
@@ -46,12 +49,9 @@ new class extends Component {
                 </svg>
             </div>
             <h3 id="modal-title" class="text-slate-900 text-base font-semibold dark:text-slate-50">
-                Are you sure you
-                want to delete it?</h3>
+                Êtes-vous sûr de vouloir le supprimer ?</h3>
             <p class="text-slate-600 text-sm mt-2 leading-relaxed dark:text-slate-400  ">
-                This action is permanent and
-                cannot be undone. Once deleted, the item will be removed from your
-                account.</p>
+                Cette action est permanente et ne peut être annulée. Une fois supprimé, l'élément sera retiré du tableau.</p>
         </div>
 
         <div class="flex justify-between gap-4 mt-6">

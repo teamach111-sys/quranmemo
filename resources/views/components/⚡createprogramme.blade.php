@@ -6,7 +6,6 @@ new class extends Component {
     public $message = null;
     public $nom;
     public $description;
-    public $nombre_annees;
 
     #[\Livewire\Attributes\On('reset-message')]
     public function resetMessage()
@@ -19,13 +18,11 @@ new class extends Component {
         $this->validate([
             'nom' => 'required|string|max:50',
             'description' => 'nullable|string',
-            'nombre_annees' => 'required|integer|min:1',
         ]);
 
         \App\Models\Programme::create([
             'nom' => $this->nom,
             'description' => $this->description,
-            'nombre_annees' => $this->nombre_annees,
         ]);
 
         $this->reset();
@@ -71,11 +68,7 @@ new class extends Component {
                     placeholder="Description....">
             </div>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Nombre d'Années</label>
-                <input type="number" wire:model="nombre_annees" id="nombre_annees" class="rounded-md border w-full p-2"
-                    placeholder="Ex: 2">
-            </div>
+           
         </div>
         <div class="flex gap-3 pt-4 w-full">
             <button type="submit"

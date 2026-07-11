@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Programme extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['nom', 'description', 'nombre_annees'];
+    protected $fillable = ['nom', 'description'];
     public function classe()
     {
         return $this->hasMany(Classe::class);

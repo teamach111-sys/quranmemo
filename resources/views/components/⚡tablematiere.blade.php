@@ -42,7 +42,7 @@ new class extends Component {
 
 
     <!-- Table -->
-    <div class="min-w-full">
+    <div class="min-w-full mt-5">
         <div
             class="border border-gray-200 dark:border-neutral-700 rounded-lg overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-none [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
             <div class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700 flex items-center justify-between">
@@ -89,7 +89,7 @@ new class extends Component {
                     <tr class="divide-x divide-gray-200 dark:divide-neutral-700">
                         @for ($i = 1; $i <= $niveau->nombre_annees; $i++)
                             <th scope="col"
-                                class="px-6 py-3 text-center  text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                class="px-6 py-3 text-left  text-sm font-medium text-gray-800 dark:text-neutral-200">
                                 {{ $i }} {{ $i == 1 ? 'ère année' : 'ème année' }}
                             </th>
                         @endfor
@@ -99,7 +99,7 @@ new class extends Component {
                     <tr class="divide-x divide-gray-200 dark:divide-neutral-700">
                         @for ($i = 1; $i <= $niveau->nombre_annees; $i++)
                             <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-800 dark:text-neutral-200 align-top">
+                                class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-800 dark:text-neutral-200 align-top">
                                 @forelse ($matieres->groupBy('annee_etude')->get($i, collect()) as $matiere)
                                     <div class="py-2    ">{{ $matiere->nom }}</div>
                                 @empty

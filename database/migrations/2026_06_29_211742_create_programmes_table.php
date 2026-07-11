@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->text('description')->nullable();
-            $table->integer('nombre_annees');
             $table->timestamps();
             $table->softDeletes();
         });

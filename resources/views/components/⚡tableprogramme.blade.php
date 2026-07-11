@@ -13,7 +13,6 @@ new class extends Component {
         ]);
     }
 
-    
     #[\Livewire\Attributes\Computed]
     public function programmes()
     {
@@ -76,18 +75,16 @@ new class extends Component {
                             </div>
                         </th>
                         <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Nom</th>
                         <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Description</th>
-                        <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
-                            Nombre d'années</th>
-                       
+                     
+
 
                         <th scope="col"
-                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase">
                             Action</th>
                     </tr>
                 </thead>
@@ -102,31 +99,29 @@ new class extends Component {
                                 </div>
                             </td>
                             <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-800 dark:text-neutral-200">
                                 {{ $programme->nom }}</td>
                             <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
+                                class="px-6 py-4 whitespace-nowrap text-left text-sm text-gray-800 dark:text-neutral-200">
                                 {{ $programme->description }}</td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800 dark:text-neutral-200">
-                                {{ $programme->nombre_annees }}</td>
                           
-                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                <div class="flex justify-center gap-4 items-center">
+
+                            <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                                <div class="flex justify-start gap-4 items-center">
                                     <a wire:navigate href="{{ route('filiere', $programme->id) }}">
                                         Gérer
                                     </a>
-                                   <div x-data="{ open: false }">
-                                     <button type="button"  @click="open = true"
-                                        class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
-                                    <div x-show="open" x-cloak id="modalOverlay"
-                                        class="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)]">
-                                        <livewire:suppmodal :item="$programme" />
+                                    <div x-data="{ open: false }" >
+                                        <button type="button" @click="open = true"
+                                            class="cursor-pointer inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-800 dark:text-white hover:text-gray-900 dark:hover:text-neutral-300 focus:outline-hidden focus:text-gray-900 dark:focus:text-neutral-300 disabled:opacity-50 disabled:pointer-events-none">Supprimer</button>
+                                        <div x-show="open" x-cloak id="modalOverlay"
+                                            class="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)]">
+                                            <livewire:suppmodal :item="$programme" />
+                                        </div>
                                     </div>
-                                   </div>
-                                  
 
-                                    
+
+
                                 </div>
                             </td>
                         </tr>
@@ -135,7 +130,7 @@ new class extends Component {
                     @empty
                         <tr>
                             <td colspan="5"
-                                class="px-6 py-4 text-center text-sm text-gray-800 dark:text-neutral-200">
+                                class="px-6 py-4 text-left text-sm text-gray-800 dark:text-neutral-200">
                                 Aucune Filière trouvé
                             </td>
                         </tr>
