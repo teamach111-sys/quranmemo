@@ -25,9 +25,9 @@ new class extends Component {
             'description' => $this->description,
         ]);
 
-        $this->reset();
-        $this->dispatch('refreshtable');
+        $this->reset(['nom', 'description']);
         $this->message = 'Programme ajouté avec succès !';
+        $this->dispatch('refreshtable');
     }
 };
 ?>
@@ -68,7 +68,7 @@ new class extends Component {
                     placeholder="Description....">
             </div>
 
-           
+
         </div>
         <div class="flex gap-3 pt-4 w-full">
             <button type="submit"
@@ -76,7 +76,7 @@ new class extends Component {
   flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
                 Ajouter la filière
             </button>
-              <button  type="button" @click="open = false; $wire.dispatch('reset-message')"
+            <button type="button" @click="open = false; $wire.dispatch('reset-message')"
                 class="dark:bg-white dark:text-black dark:hover:bg-slate-100
   flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
                 Fermer

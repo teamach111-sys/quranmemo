@@ -1,26 +1,25 @@
 <?php
 
 use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\WithoutUrlPagination;
 
 new class extends Component {
+    use WithPagination, WithoutUrlPagination;
+
     public string $recherche = '';
 
     #[\Livewire\Attributes\On('refreshtable')]
     public function render()
     {
         return view('⚡tableprogramme', [
-            'programmes' => \App\Models\Programme::orderBy('id', 'desc')->paginate(12),
+            'programmes' => \App\Models\Programme::orderBy('id', 'desc')
+            ->where('nom', 'like', "%{$this->recherche}%")
+            ->paginate(12),
         ]);
     }
 
-    #[\Livewire\Attributes\Computed]
-    public function programmes()
-    {
-        return \App\Models\Programme::orderBy('id', 'desc')
-            ->where('nom', 'like', "%{$this->recherche}%")
-            ->orWhere('nombre_annees', 'like', "%{$this->recherche}%")
-            ->paginate(12);
-    }
+    
 };
 ?>
 
@@ -89,8 +88,8 @@ new class extends Component {
                     </tr>
                 </thead>
                 <tbody x-data="{ open3: false }" class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    @forelse ($this->programmes as $programme)
-                        <tr>
+                    @forelse ($programmes as $programme)
+                        <tr wire:key="{{ $programme->id }}">
                             <td class="py-3 ps-4">
                                 <div class="flex items-center h-5">
                                     <input type="checkbox"

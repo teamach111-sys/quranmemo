@@ -101,7 +101,7 @@ new class extends Component {
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-800 dark:text-neutral-200 align-top">
                                 @forelse ($matieres->groupBy('annee_etude')->get($i, collect()) as $matiere)
-                                    <div class="py-2    ">{{ $matiere->nom }}</div>
+                                    <div wire:key="{{ $matiere->id }}" class="py-2    ">{{ $matiere->nom }}</div>
                                 @empty
                                     <span
                                         class="px-6 py-3 text-center  text-sm font-medium text-gray-800 dark:text-neutral-200">Aucune

@@ -116,7 +116,7 @@ new class extends Component {
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                     @forelse ($this->etudiants as $etudiant)
-                        <tr>
+                        <tr wire:key="{{ $etudiant->id }}">
                             <td class="py-3 ps-4">
                                 <div class="flex items-center h-5">
                                     <input type="checkbox"
