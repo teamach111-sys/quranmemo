@@ -19,6 +19,7 @@ new class extends Component {
         $this->dispatch('refreshtable');
         $this->dispatch('refreshniveaux');
         $this->dispatch('refreshparent');
+        $this->dispatch('refresh-table2');
         
     }
 };

@@ -70,7 +70,8 @@ new class extends Component {
                             class="w-5 h-5" />Exporter</button>
 
                     <Button @click="open = true"
-                        class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-codicon-add class="h-5 w-5" />
+                        class="flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-codicon-add
+                            class="h-5 w-5" />
                         Ajouter une matière</Button>
                     <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                         <div class="bg-white dark:bg-[#262626] rounded-lg p-6 w-full max-w-[800px]"
@@ -101,7 +102,18 @@ new class extends Component {
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-800 dark:text-neutral-200 align-top">
                                 @forelse ($matieres->groupBy('annee_etude')->get($i, collect()) as $matiere)
-                                    <div wire:key="{{ $matiere->id }}" class="py-2    ">{{ $matiere->nom }}</div>
+                                    <div class="flex justify-between items-center">
+                                        <div wire:key="{{ $matiere->id }}" class="py-2    ">{{ $matiere->nom }}</div>
+
+                                        <div x-data="{ open: false }">
+                                            <x-uiw-delete @click="open=true" class="w-5 h-5 cursor-pointer" />
+                                            <div x-show="open" x-cloak id="modalOverlay"
+                                                class="fixed inset-0 p-4 flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)]">
+                                                <livewire:suppmodal :item="$matiere" />
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 @empty
                                     <span
                                         class="px-6 py-3 text-center  text-sm font-medium text-gray-800 dark:text-neutral-200">Aucune
