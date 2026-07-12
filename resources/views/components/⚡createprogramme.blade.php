@@ -26,7 +26,7 @@ new class extends Component {
         ]);
 
         $this->reset(['nom', 'description']);
-        $this->message = 'Programme ajouté avec succès !';
+        $this->message = 'Filière ajoutée avec succès !';
         $this->dispatch('refreshtable');
     }
 };
