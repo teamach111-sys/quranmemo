@@ -7,7 +7,6 @@ use App\Models\Programme;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component {
-
     public $nom;
     public $nombre_annees;
     public $programme_id;
@@ -106,17 +105,19 @@ new class extends Component {
             <!-- Nombre d'années -->
             <div>
                 <label class="block text-sm font-medium mb-1">Nombre d'années</label>
-                <input type="number" wire:model="nombre_annees" id="nombre_annees" min="1" max="10" class="rounded-md border w-full p-2"
-                    placeholder="Ex: 1, 2, 3">
+                <input type="number" wire:model="nombre_annees" id="nombre_annees" min="1" max="10"
+                    class="rounded-md border w-full p-2" placeholder="Ex: 1, 2, 3">
             </div>
 
             <!-- Programme -->
             <div>
                 <label class="block text-sm font-medium mb-1">Programme</label>
                 <select wire:model="programme_id" id="programme_id" class="rounded-md border w-full p-2">
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="">Sélectionnez un programme</option>
+                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="">Sélectionnez un
+                        programme</option>
                     @foreach ($programmes as $programme)
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="{{ $programme->id }}">
+                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100"
+                            value="{{ $programme->id }}">
                             {{ $programme->nom }}
                         </option>
                     @endforeach
@@ -128,13 +129,13 @@ new class extends Component {
         <div class="flex gap-3 pt-4">
             <button type="submit"
                 class="dark:bg-white dark:text-black dark:hover:bg-slate-100
-  flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
+  flex-1 rounded-md bg-darkcontentbg hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
                 Ajouter le niveau
             </button>
 
             <button type="button" @click="open = false; $wire.dispatch('reset-message2')"
                 class="dark:bg-white dark:text-black dark:hover:bg-slate-100
-  flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
+  flex-1 rounded-md bg-darkcontentbg hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
                 Fermer
             </button>
         </div>
@@ -160,7 +161,8 @@ new class extends Component {
                         @forelse ($niveaux as $niveau)
                             <tr class="hover:bg-gray-100 dark:hover:bg-slate-800">
                                 <td class="border border-gray-300 px-4 py-2">{{ $niveau->nom }}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">{{ $niveau->nombre_annees }}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">{{ $niveau->nombre_annees }}
+                                </td>
                                 <td class="border border-gray-300 px-4 py-2">{{ $niveau->programme->nom ?? 'N/A' }}</td>
                                 <td class="border border-gray-300 px-4 py-2 text-center">
                                     @if ($niveau->deleted_at)

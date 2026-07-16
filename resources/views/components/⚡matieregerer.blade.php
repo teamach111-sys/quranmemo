@@ -4,20 +4,19 @@ use Livewire\Component;
 
 new class extends Component
 {
-    public $niveau_id;
-    public $message;
+    public $niveauid;
     public $niveau;
 
-    #[\Livewire\Attributes\On('mount')]
     public function mount(\App\Models\Niveau $niveau)
     {
-        $this->niveau_id = $niveau->id;
+        $this->niveauid = $niveau->id;
         $this->niveau = $niveau;
     }
 };
 ?>
 
 <div >
-    <livewire:tablematiere :niveau="$niveau" />
+    <livewire:tablematiere2 :niveau="$niveauid" />
+
 
 </div>

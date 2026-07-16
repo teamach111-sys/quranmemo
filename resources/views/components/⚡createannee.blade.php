@@ -8,7 +8,6 @@ new class extends Component {
     public $date_debut;
     public $date_fin;
     public $est_en_cours;
-  
 
     public function store()
     {
@@ -40,11 +39,6 @@ new class extends Component {
         $this->message = null;
         $this->resetValidation();
     }
-   
-
-    
-
-   
 };
 
 ?>
@@ -107,11 +101,11 @@ new class extends Component {
 
         <button type="submit" wire:dispatch('reset-message')
             class="mt-5 dark:bg-white dark:text-black dark:hover:bg-slate-100
-  flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer flex gap-2 items-center ">
+  flex-1 rounded-md bg-darkcontentbg hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer flex gap-2 items-center ">
             <x-codicon-add class="h-5 w-5" /> Ajouter l'Année
         </button>
     </form>
-    
+
 
 
 

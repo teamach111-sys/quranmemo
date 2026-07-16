@@ -154,7 +154,7 @@ new class extends Component {
         </div>
 
         <button type="submit" wire:dispatch('reset-message')
-            class="mt-5 dark:bg-white dark:text-black dark:hover:bg-slate-100 flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer flex gap-2 items-center ">
+            class="mt-5 dark:bg-white dark:text-black dark:hover:bg-slate-100 flex-1 rounded-md bg-darkcontentbg hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer flex gap-2 items-center ">
             <x-codicon-add class="h-5 w-5" /> Ajouter la Classe
         </button>
     </form>

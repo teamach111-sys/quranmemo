@@ -11,7 +11,7 @@ new class extends Component {
     {
         $this->lesannees = \App\Models\AnneeScolaire::orderBy('id', 'desc')->get();
     }
-     public function supprimerlannee()
+    public function supprimerlannee()
     {
         if ($this->anneeselecte) {
             \App\Models\AnneeScolaire::destroy($this->anneeselecte);
@@ -21,12 +21,12 @@ new class extends Component {
             $this->message = 'L\'année scolaire a été supprimé avec succès';
         }
     }
-      public function resetMessage()
+    public function resetMessage()
     {
         $this->message = null;
         $this->resetValidation();
     }
-     public function mount()
+    public function mount()
     {
         $this->jibannees1();
     }
@@ -68,7 +68,7 @@ new class extends Component {
             @endforeach
         </select>
         <Button wire:click="supprimerlannee"
-            class="w-90 flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-uiw-delete
+            class="w-90 flex items-center gap-2 cursor-pointer h-10 bg-darkcontentbg hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-uiw-delete
                 class="w-5 h-5" />Supprimer
             l'Année</Button>
 

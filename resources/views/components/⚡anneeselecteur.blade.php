@@ -18,13 +18,13 @@ new class extends Component
 };
 ?>
 
-<div>
+<div class="w-50">
     
-      <select name="" id=""
-              class="p-2 border focus:outline-none border-[#E5E5E5
-] dark:border-[#3E3E3E] h-10 rounded-md w-40">
+      <x-select.native name="" id=""
+              >
               @foreach ($annees as $annee)
-                  <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="{{ $annee->id }}">{{ $annee->libelle }}</option>
+                  <option  value="{{ $annee->id }}">{{ $annee->libelle }}</option>
               @endforeach
-          </select>
+          </x-select.native>
+         
 </div>

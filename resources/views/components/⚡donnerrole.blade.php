@@ -61,7 +61,8 @@ new class extends Component {
             @foreach ($utilisateurliste as $utilisateur)
                 <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border"
                     value="{{ $utilisateur->id }}">
-                   {{ $utilisateur->name }}-<span class="text-gray-400 dark:text-gray-600">({{ $utilisateur->role }})</span>
+                    {{ $utilisateur->name }}-<span
+                        class="text-gray-400 dark:text-gray-600">({{ $utilisateur->role }})</span>
             @endforeach
         </select>
 
@@ -81,7 +82,7 @@ new class extends Component {
 
     </div>
     <Button wire:click="assignerRole"
-        class="my-5 flex items-center gap-2 cursor-pointer h-10 bg-[#262626] hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-uiw-check
+        class="my-5 flex items-center gap-2 cursor-pointer h-10 bg-darkcontentbg hover:bg-[#3B3B3B] dark:bg-white dark:text-black dark:hover:bg-slate-100 border text-white rounded-sm px-4 py-2 justify-center"><x-uiw-check
             class="w-5 h-5" />Assigner le Rôle</Button>
 
 </div>

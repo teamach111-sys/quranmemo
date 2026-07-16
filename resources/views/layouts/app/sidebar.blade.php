@@ -5,9 +5,9 @@
     @include('partials.head')
 </head>
 
-<body class="min-h-screen bg-white dark:bg-zinc-800">
+<body class="min-h-screen bg-white dark:bg-darkcontentbg">
     <flux:sidebar sticky collapsible="mobile"
-        class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+        class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-darksidebar">
         <flux:sidebar.header>
             <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
             <flux:sidebar.collapse class="lg:hidden" />
@@ -61,7 +61,7 @@
     <!-- Mobile User Menu -->
     <flux:header class="lg:hidden">
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
-        <div class="h-20  w-full p-5 dark:text-white dark:bg-[#262626]">
+        <div class="h-20  w-full p-5 dark:text-white dark:bg-darkcontentbg">
             <select name="" id=""
                 class="p-2 border h-10 focus:outline-none border border-[#DEDEDE] dark:border-[#3E3E3E] rounded-md w-40">
                 <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">2026/2027

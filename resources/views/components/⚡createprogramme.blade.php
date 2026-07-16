@@ -3,16 +3,13 @@
 use Livewire\Component;
 
 new class extends Component {
-    public $message = null;
     public $nom;
     public $description;
 
-    #[\Livewire\Attributes\On('reset-message')]
-    public function resetMessage()
-    {
-        $this->message = null;
+  
+    public function resetval(){
+        $this->resetValidation();
     }
-
     public function store()
     {
         $this->validate([
@@ -26,61 +23,38 @@ new class extends Component {
         ]);
 
         $this->reset(['nom', 'description']);
-        $this->message = 'Filière ajoutée avec succès !';
-        $this->dispatch('refreshtable');
+        $this->dispatch('refreshfiliere');
     }
 };
 ?>
 
-<div>
-    <div class="w-full my-3 ">
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                <strong>Erreur!</strong>
-                <ul class="mt-2 list-disc list-inside text-sm">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @else
-            @if ($message)
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" x-data
-                    x-init="setTimeout(() => $wire.resetMessage(), 3000)">
-                    <strong>Succès!</strong>
-                    <p>{{ $message }}</p>
-                </div>
-            @endif
-        @endif
-    </div>
+<div class="w-200">
+ 
     <form wire:submit.prevent="store">
         @csrf
         <div class="grid grid-cols-2 w-full gap-4">
             <div>
-                <label class="block text-sm font-medium mb-1">Nom</label>
-                <input type="text" wire:model="nom" id="nom" class="rounded-md border w-full p-2"
-                    placeholder="Ex: diplome de ....">
+                <x-input label="Nom" placeholder="Ex: Developement informatique" wire:model="nom" />
             </div>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Description</label>
-                <input type="text" wire:model="description" id="description" class="rounded-md border w-full p-2"
-                    placeholder="Description....">
+             <div>
+                <x-input label="Description" placeholder="Description de la filiére" wire:model="description" />
             </div>
 
 
         </div>
         <div class="flex gap-3 pt-4 w-full">
-            <button type="submit"
-                class="dark:bg-white dark:text-black dark:hover:bg-slate-100
-  flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
+          <x-button type="submit"
+                class="dark:!bg-darkaddbutton dark:text-black dark:focus:!ring-darkaddbuttonring
+  flex-1 rounded-md bg-darkcontentbg hover:!bg-darkaddbuttonhover text-white px-4 py-2 cursor-pointer ">
                 Ajouter la filière
-            </button>
-            <button type="button" @click="open = false; $wire.dispatch('reset-message')"
-                class="dark:bg-white dark:text-black dark:hover:bg-slate-100
-  flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
+            </x-button>
+
+            <x-button type="button" x-on:click="$tsui.close.modal('createfiliere'); $wire.resetval()"
+                class=" dark:text-black 
+  flex-1 rounded-md   text-white px-4 py-2 cursor-pointer ">
                 Fermer
-            </button>
+            </x-button>
 
 
         </div>

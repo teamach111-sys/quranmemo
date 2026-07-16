@@ -1,26 +1,43 @@
 <?php
 
+use App\Models\Etudiant;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Livewire\Attributes\On;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+
 new class extends Component {
     use WithFileUploads;
 
     public $nom;
+
     public $prenom;
+
     public $photo;
+
     public $sexe;
+
     public $date_naissance;
+
     public $telephone;
+
     public $email;
+
     public $adresse;
+
     public $parent_nom;
+
     public $parent_telephone;
+
     public $parent_relation;
+
     public $est_actif;
+
     public $message;
+    #[On('refreshupload')]
+    public function deleteUpload(): void
+    {
+        $this->photo = null;
+    }
 
     public function store()
     {
@@ -41,7 +58,7 @@ new class extends Component {
 
         $path = $this->photo->store('photos', 'public');
 
-        \App\Models\Etudiant::create([
+        Etudiant::create([
             'nom' => $this->nom,
             'photo' => $path,
             'prenom' => $this->prenom,
@@ -60,9 +77,10 @@ new class extends Component {
         $this->message = 'L\'étudiant a été créé avec succès';
         $this->getAll();
     }
+
     public function getAll()
     {
-        return \App\Models\Etudiant::all();
+        return Etudiant::all();
     }
 
     #[On('reset-message')]
@@ -70,145 +88,103 @@ new class extends Component {
     {
         $this->message = null;
         $this->resetValidation();
+        $this->dispatch('refreshupload');
     }
 };
 ?>
 
-<div>
+<div class="w-200">
     <form class="flex flex-col gap-4 w-full" wire:submit.prevent="store"
         wire:loading.class="opacity-50 cursor-not-allowed">
 
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                <strong>Erreur!</strong>
-                <ul class="mt-2 list-disc list-inside text-sm">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @else
+      
             @if ($message)
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
                     <strong>Succès!</strong>
                     <p>{{ $message }}</p>
                 </div>
             @endif
-        @endif
+      
 
         <!-- tlmid -->
         <div class="grid grid-cols-3 gap-4">
-            <!-- Nom -->
             <div>
-                <label class="block text-sm font-medium mb-1">Nom</label>
-                <input type="text" wire:model="nom" id="nom" class="rounded-md border w-full p-2"
-                    placeholder="Entrez le nom">
+                <x-input label="Nom" placeholder="Nom" wire:model="nom" />
             </div>
 
-            <!-- Prenom -->
             <div>
-                <label class="block text-sm font-medium mb-1">Prénom</label>
-                <input type="text" wire:model="prenom" id="prenom" class="rounded-md border w-full p-2"
-                    placeholder="Entrez le prénom">
+                <x-input label="Prénom" placeholder="Entrez le prénom" wire:model="prenom" />
             </div>
 
-            <!-- Photo -->
             <div>
-                <label class="block text-sm font-medium mb-1">Photo</label>
-                <input type="file" wire:model="photo" id="photo" class="rounded-md border w-full p-2">
+                <x-upload delete label="Photo" delete-method="deleteUpload" wire:model="photo" />
             </div>
 
-            <!-- Sexe -->
             <div>
-                <label class="block text-sm font-medium mb-1">Sexe</label>
-                <select wire:model="sexe" id="sexe" class="rounded-md border w-full p-2">
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="">Sélectionnez le sexe</option>
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="M">Masculin</option>
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="F">Féminin</option>
-                </select>
+                <x-select.native label="Sexe" wire:model="sexe">
+                    <option value="">Sélectionnez le sexe</option>
+                    <option value="M">Masculin</option>
+                    <option value="F">Féminin</option>
+                </x-select.native>
             </div>
 
-            <!-- Date de naissance -->
             <div>
-                <label class="block text-sm font-medium mb-1">Date de naissance</label>
-                <input type="date" wire:model="date_naissance" id="date_naissance"
-                    class="rounded-md border w-full p-2 ">
+                <x-input type="date" label="Date de naissance" wire:model="date_naissance" />
             </div>
 
-            <!-- Telephone -->
             <div>
-                <label class="block text-sm font-medium mb-1">Téléphone</label>
-                <input type="text" wire:model="telephone" id="telephone" class="rounded-md border w-full p-2"
-                    placeholder="Ex: 0678576807">
+                <x-input label="Téléphone" placeholder="Ex: 0678576807" wire:model="telephone" />
             </div>
 
-            <!-- Email -->
             <div>
-                <label class="block text-sm font-medium mb-1">Email (Optionnel)</label>
-                <input type="email" wire:model="email" id="email" class="rounded-md border w-full p-2"
-                    placeholder="exemple@email.com">
+                <x-input type="email" label="Email (Optionnel)" placeholder="exemple@email.com" wire:model="email" />
             </div>
 
-            <!-- Adresse -->
             <div class="col-span-2">
-                <label class="block text-sm font-medium mb-1">Adresse (Optionnel)</label>
-                <input type="text" wire:model="adresse" id="adresse" class="rounded-md border w-full p-2"
-                    placeholder="Entrez l'adresse">
+                <x-input label="Adresse (Optionnel)" placeholder="Entrez l'adresse" wire:model="adresse" />
             </div>
 
-            <!-- Est actif -->
-            <div class="flex items-center gap-2">
-                <input type="checkbox" wire:model="est_actif" id="est_actif" class="rounded">
-                <label for="est_actif" class="text-sm">Étudiant actif</label>
+            <div class="flex items-center gap-2 mt-6">
+                <x-checkbox label="Étudiant actif" wire:model="est_actif" />
             </div>
         </div>
 
-        <!-- Parent Section -->
-        <div class="border-t pt-4">
+        <div class="border-t pt-4 mt-2">
             <h3 class="font-bold text-lg mb-4">Informations du parent/tuteur (Optionnel)</h3>
 
             <div class="grid grid-cols-3 gap-4">
-                <!-- Parent Nom -->
                 <div>
-                    <label class="block text-sm font-medium mb-1">Nom du parent</label>
-                    <input type="text" wire:model="parent_nom" id="parent_nom" class="rounded-md border w-full p-2"
-                        placeholder="Nom du parent">
+                    <x-input label="Nom du parent" placeholder="Nom du parent" wire:model="parent_nom" />
                 </div>
 
-                <!-- Parent Telephone -->
                 <div>
-                    <label class="block text-sm font-medium mb-1">Téléphone du parent</label>
-                    <input type="text" wire:model="parent_telephone" id="parent_telephone"
-                        class="rounded-md border w-full p-2" placeholder="Ex: 064736572">
+                    <x-input label="Téléphone du parent" placeholder="Ex: 064736572" wire:model="parent_telephone" />
                 </div>
 
-                <!-- Parent Relation -->
                 <div>
-                    <label class="block text-sm font-medium mb-1">Relation avec le parent</label>
-                    <select wire:model="parent_relation" id="parent_relation" class="rounded-md border w-full p-2">
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="">Sélectionnez la relation</option>
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="mere">Mère</option>
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="pere">Père</option>
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="tuteur">Tuteur</option>
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100" value="autre">Autre</option>
-                    </select>
+                    <x-select.native label="Relation avec le parent" wire:model="parent_relation">
+                        <option value="">Sélectionnez la relation</option>
+                        <option value="mere">Mère</option>
+                        <option value="pere">Père</option>
+                        <option value="tuteur">Tuteur</option>
+                        <option value="autre">Autre</option>
+                    </x-select.native>
                 </div>
             </div>
         </div>
 
-        <!-- Buttons -->
         <div class="flex gap-3 pt-4">
-            <button type="submit"
-                class="dark:bg-white dark:text-black dark:hover:bg-slate-100
-  flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
+            <x-button type="submit"
+                class="dark:!bg-darkaddbutton dark:text-black dark:focus:!ring-darkaddbuttonring
+  flex-1 rounded-md bg-darkcontentbg hover:!bg-darkaddbuttonhover text-white px-4 py-2 cursor-pointer ">
                 Ajouter l'etudiant
-            </button>
+            </x-button>
 
-            <button  type="button" @click="open = false; $wire.dispatch('reset-message')"
-                class="dark:bg-white dark:text-black dark:hover:bg-slate-100
-  flex-1 rounded-md bg-[#262626] hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer ">
+            <x-button type="button" x-on:click="$tsui.close.modal('createetudiant'); $wire.dispatch('reset-message')"
+                class=" dark:text-black 
+  flex-1 rounded-md   text-white px-4 py-2 cursor-pointer ">
                 Fermer
-            </button>
+            </x-button>
         </div>
 
     </form>

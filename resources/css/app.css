@@ -1,10 +1,14 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+@import '../../vendor/tallstackui/tallstackui/css/v4.css';
+
+@plugin '@tailwindcss/forms';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+@source '../../vendor/tallstackui/tallstackui/**/*.php';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -22,11 +26,53 @@
     --color-zinc-800: #262626;
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
-    --color-gg: #262626;
+
+    
+    --color-darkcontentbg: #24352C;         /* medium dark green, not near-black */
+--color-darkcontenttext: #F3F1E9;       /* warm ivory */
+--color-darksidebar: #1B2921;           /* slightly deeper green for sidebar contrast */
+--color-darkborder: #3C5347;            /* soft sage-green border */
+--color-darkbutton: #E0B94F;            /* warm gold — primary action */
+--color-darkbuttonhover: #C6A13F;       /* deeper gold hover */
+--color-darksidebartext: #F3F1E9;
+--color-darkinput: #2C4038;             /* input bg, lighter than sidebar */
+--color-whitecontenttext: #1C2A22;      /* dark green for text-on-light */
+--color-overlayy: rgba(0, 0, 0, 0.5);
+
+--color-darkdeletebutton: #F0605C;
+--color-darkdeletebuttonhover: #D4453F;
+--color-darkaddbutton: #4FB080;         /* fresh green, distinct from bg */
+--color-darkaddbuttonhover: #3B9269;
+--color-darkaddbuttonring:#3B9269;
+
+--color-paginatornonactive: #2E4238;
+--color-paginatoractive: #223229;
+
+--color-darkinputcolor: #2A3D34;
+--color-darkinputoutline: #587264;
+--color-darkinputplaceholder: #8CA396;
+
+    /* Override TallStackUI's default "dark" palette for inputs and components */
+    --color-dark-800: var(--color-darkinputcolor);
+    /* Input Background */
+    --color-dark-600: var(--color-darkinputoutline);
+    /* Input Outline */
+    --color-dark-400: var(--color-darkinputplaceholder);
+    /* Input Placeholder */
+
+
+
+    /* buttons primary*/
+    --color-primary-50: var(--color-whitecontenttext);
+    --color-primary-500: var(--color-darkbutton);
+    --color-primary-600: var(--color-darkbuttonhover);
+    --color-primary-700: var(--color-darkbutton);
+
 
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);
     --color-accent-foreground: var(--color-white);
+
 }
 
 @layer theme {
@@ -34,7 +80,8 @@
         --color-accent: var(--color-white);
         --color-accent-content: var(--color-white);
         --color-accent-foreground: var(--color-neutral-800);
-        --color-gg: #ffffff;
+
+
 
     }
 }
@@ -55,7 +102,7 @@
 }
 
 [data-flux-label] {
-    @apply  !mb-0 !leading-tight;
+    @apply !mb-0 !leading-tight;
 }
 
 input:focus[data-flux-control],
