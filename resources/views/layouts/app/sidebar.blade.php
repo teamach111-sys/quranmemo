@@ -26,6 +26,10 @@
                         wire:navigate>
                         {{ __('Gestion des etudiants') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="book-open" :href="route('classes')" :current="request()->routeIs('classes')"
+                        wire:navigate>
+                        {{ __('Gestion des classes') }}
+                    </flux:sidebar.item>
                 @endcanany
 
                 @can('view-notes')

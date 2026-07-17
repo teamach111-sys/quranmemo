@@ -1,7 +1,6 @@
 <?php
 
 use Livewire\Component;
-use Illuminate\Database\Eloquent\Model;
 
 new class extends Component {
     public int|array|null $itemid = null;
@@ -15,30 +14,32 @@ new class extends Component {
     }
 
     public function destroy()
-    {
-        if ($this->itemid && $this->itemclass) {
+{
+    if ($this->itemid && $this->itemclass) {
+        try {
             if (is_array($this->itemid)) {
                 app($this->itemclass)->whereIn('id', $this->itemid)->delete();
-                $this->dispatch('refreshtable');
-                $this->dispatch('refreshniveaux');
-                $this->dispatch('refreshetudiants');
-                $this->dispatch('refresh-table2');
-                $this->dispatch('refreshfiliere');
-                $this->dispatch('refreshmatiere');
-                $this->itemid = null;
             } else {
-                app($this->itemclass)->find($this->itemid)->delete();
-                $this->dispatch('refreshtable');
-                $this->dispatch('refreshniveaux');
-                $this->dispatch('refreshetudiants');
-                $this->dispatch('refresh-table2');
-                $this->dispatch('refreshfiliere');
-                $this->dispatch('refreshmatiere');
-
-                $this->itemid = null;
+                $model = app($this->itemclass)->find($this->itemid);
+                if ($model) {  
+                    $model->delete();
+                }
             }
+            $this->dispatch('refreshtable');
+            $this->dispatch('refreshniveaux');
+            $this->dispatch('refreshetudiants');
+            $this->dispatch('refresh-table2');
+            $this->dispatch('refreshfiliere');
+            $this->dispatch('refreshmatiere');
+            $this->dispatch('refreshClasse');
+
+            $this->itemid = null;
+            $this->itemclass = null;
+        } catch (\Exception $e) {
+            $this->dispatch('notify', message: 'Erreur lors de la suppression', type: 'error');
         }
     }
+}
 };
 ?>
 

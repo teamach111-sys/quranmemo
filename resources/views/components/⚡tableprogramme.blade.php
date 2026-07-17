@@ -8,7 +8,6 @@ use Livewire\WithoutUrlPagination;
 new class extends Component {
     use WithPagination, WithoutUrlPagination;
 
-    public string $recherche = '';
     public int $quantity = 10;
     public ?string $search = '';
     public array $selected = [];
@@ -46,12 +45,12 @@ new class extends Component {
                     @if (count($selected) > 0)
                         <x-button
                             class="dark:focus:!ring-darkdeletebutton dark:!bg-darkdeletebutton dark:!text-darkcontenttext dark:hover:!bg-darkdeletebuttonhover"
-                            x-on:click="$dispatch('pickid', { class: 'App\\\\Models\\\\Programme', id: {{ json_encode($selected) }} }); $tsui.open.modal('deletedata')">
+                            x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Programme')) }}', id: {{ json_encode($selected) }} }); $tsui.open.modal('deletedata')">
                             Supprimer sélectionné ({{ count($selected) }})
                         </x-button>
                     @endif
                     <x-button x-on:click="$tsui.open.modal('createfiliere')">
-                        Nouvelle filière
+                        <x-codicon-add class="h-5 w-5" />Nouvelle filière
                     </x-button>
                 </div>
             </div>
@@ -64,7 +63,7 @@ new class extends Component {
                     Gérer les niveaux
                 </button>
                 <button
-                    x-on:click="$dispatch('pickid', { class: 'App\\\\Models\\\\Programme', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
+                    x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Programme')) }}', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
                     type="button"
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-red-500 hover:text-red-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Supprimer

@@ -51,7 +51,7 @@ new class extends Component {
                     type="search" />
             </div>
             <x-button x-on:click="$tsui.open.modal('creatematiere')">
-                Nouvelle matière
+               <x-codicon-add class="h-5 w-5" /> Nouvelle matière
             </x-button>
         </div>
 
@@ -63,7 +63,7 @@ new class extends Component {
 
                     @interact('column_action', $row)
                         <button
-                            x-on:click="$dispatch('pickid', { class: 'App\\Models\\Matiere', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
+                            x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Matiere')) }}', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
                             type="button"
                             class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-red-500 hover:text-red-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                             Supprimer

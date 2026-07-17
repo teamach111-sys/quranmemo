@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Etudiant;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -29,7 +28,7 @@ new class extends Component {
     {
         return [
             'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'nom', 'label' => 'Nom'], ['index' => 'prenom', 'label' => 'Prénom'], ['index' => 'sexe', 'label' => 'Sexe'], ['index' => 'date_naissance', 'label' => 'Date de naissance'], ['index' => 'telephone', 'label' => 'Téléphone'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
-            'rows' => Etudiant::query()
+            'rows' => \App\Models\Etudiant::query()
                 ->when(
                     $this->search,
                     fn($query) => $query
@@ -56,12 +55,12 @@ new class extends Component {
                 <div class="flex gap-2">
                     @if (count($selected) > 0)
                         <x-button class="dark:focus:!ring-darkdeletebutton dark:!bg-darkdeletebutton dark:!text-darkcontenttext dark:hover:!bg-darkdeletebuttonhover"
-                            x-on:click="$dispatch('pickid', { class: 'App\\\\Models\\\\Etudiant', id: {{ json_encode($selected) }} }); $tsui.open.modal('deletedata')">
+                            x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Etudiant')) }}', id: {{ json_encode($selected) }} }); $tsui.open.modal('deletedata')">
                             Supprimer sélectionné ({{ count($selected) }})
                         </x-button>
                     @endif
                     <x-button x-on:click="$tsui.open.modal('createetudiant')">
-                        Nouveau etudiant
+                       <x-codicon-add class="h-5 w-5" /> Nouveau etudiant
                     </x-button>
                 </div>
             </div>
@@ -70,7 +69,7 @@ new class extends Component {
         @interact('column_action', $row)
             <div class="flex justify-left gap-4 items-center">
                 <button
-                    x-on:click="$dispatch('pickid', { class: 'App\\\\Models\\\\Etudiant', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
+                    x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Etudiant')) }}', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
                     type="button"
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-red-500 hover:text-red-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Supprimer

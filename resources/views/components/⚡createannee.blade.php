@@ -1,9 +1,9 @@
 <?php
 
 use Livewire\Component;
-
+use TallStackUi\Traits\Interactions;
 new class extends Component {
-    public $message = null;
+    use Interactions;
     public $libelle;
     public $date_debut;
     public $date_fin;
@@ -31,79 +31,46 @@ new class extends Component {
         $this->reset();
         $this->dispatch('annee-cree');
         $this->dispatch('actualiser-annee');
-        $this->message = 'L\'année scolaire a été créée avec succès';
+        $this->toast()->success('Création réussie', 'L\'année scolaire a été créée avec succès.')->send();
     }
 
     public function resetMessage()
     {
-        $this->message = null;
         $this->resetValidation();
     }
 };
 
 ?>
 
-<div>
+<div class="">
     <h1 class="font-medium text-[18px] my-3">Ajouter une année scolaire</h1>
-    <div class="w-200 my-3">
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                <strong>Erreur!</strong>
-                <ul class="mt-2 list-disc list-inside text-sm">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @else
-            @if ($message)
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" x-data
-                    x-init="setTimeout(() => $wire.resetMessage(), 3000)">
-                    <strong>Succès!</strong>
-                    <p>{{ $message }}</p>
-                </div>
-            @endif
-        @endif
 
-
-    </div>
     <form wire:submit.prevent="store">
 
         <div class="grid grid-cols-2 w-200 gap-4">
 
 
 
-            <!-- Libellé -->
             <div>
-                <label class="block text-sm font-medium mb-1">Libellé</label>
-                <input type="text" wire:model="libelle" id="libelle" class="rounded-md border w-full p-2"
-                    placeholder="Ex: 2026/2027">
+                <x-input label="Libellé" type="text" wire:model="libelle" id="libelle" placeholder="Ex: 2026/2027" />
             </div>
 
-            <!-- Date début -->
             <div>
-                <label class="block text-sm font-medium mb-1">Date début</label>
-                <input type="date" wire:model="date_debut" id="date_debut" class="rounded-md border w-full p-2">
+                <x-input label="Date début" type="date" wire:model="date_debut" id="date_debut" />
             </div>
 
-            <!-- Date fin -->
             <div>
-                <label class="block text-sm font-medium mb-1">Date fin</label>
-                <input type="date" wire:model="date_fin" id="date_fin" class="rounded-md border w-full p-2">
+                <x-input label="Date fin" type="date" wire:model="date_fin" id="date_fin" />
             </div>
 
-            <!-- Est en cours -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Année courante</label>
-                <input type="checkbox" wire:model="est_en_cours" id="est_en_cours" class="rounded">
+            <div class="flex items-center gap-2 mt-6">
+                <x-checkbox label="Année courante" wire:model="est_en_cours" id="est_en_cours" />
             </div>
         </div>
 
-        <button type="submit" wire:dispatch('reset-message')
-            class="mt-5 dark:bg-white dark:text-black dark:hover:bg-slate-100
-  flex-1 rounded-md bg-darkcontentbg hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer flex gap-2 items-center ">
+        <x-button type="submit" wire:dispatch('reset-message') class="mt-4 ">
             <x-codicon-add class="h-5 w-5" /> Ajouter l'Année
-        </button>
+        </x-button>
     </form>
 
 

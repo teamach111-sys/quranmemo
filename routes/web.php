@@ -19,7 +19,9 @@ Route::middleware(['auth', 'verified', 'can:admin'])->group(function () {
 });
 Route::middleware(['auth', 'verified', 'can:view-etudiants'])->group(function () {
     Route::livewire('createetudiant', '⚡createetudiant')->name('createetudiant');
+    Route::livewire('classes', '⚡classe')->name('classes');
     Route::livewire('etudiants', '⚡etudiants')->name('etudiants');
+
     Route::livewire('/filieregerer/{programme}', '⚡filieregerer')->name('filiere');
     Route::livewire('/matieregerer/{niveau}', '⚡matieregerer')->name('matiere');
 

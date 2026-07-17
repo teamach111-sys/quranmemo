@@ -60,7 +60,8 @@ class User extends Authenticatable implements PasskeyUser
             : $initials;
     }
 
-    public function classe(){
+    public function Classe()
+    {
         return $this->hasMany(Classe::class, 'professeur_id');
     }
 }

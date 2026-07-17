@@ -2,16 +2,14 @@
 
 use Livewire\Component;
 
-new class extends Component {
-   
-};
+new class extends Component {};
 ?>
 
 <x-slot:title>
     {{ __('Configuration') }}
 </x-slot:title>
 
-<div>
+<div class="w-auto">
     <div class="flex flex-col gap-3">
 
         <div class="flex  justify-between gap-4 items-center">
@@ -21,21 +19,21 @@ new class extends Component {
 
             <div class="flex gap-2 ">
 
-               
+
             </div>
         </div>
-        
+
     </div>
 
-    <div class="mt-5">
-        <livewire:createannee />
-    </div>
-      <div class="mt-5">
-       <livewire:supprimerannee />
-    </div>
+    <div class="mt-5 border dark:border-darkborder rounded-md p-4 w-fit">
+        <livewire:createannee/>
+        <hr class="border-t dark:border-darkborder my-6" />
+        <livewire:supprimerannee/>
 
-    <div class="mt-5">
+    </div>
+  
+
+    <div class="mt-5 border border-darkborder rounded-md p-4 w-fit">
         <livewire:donnerrole />
     </div>
 </div>
-

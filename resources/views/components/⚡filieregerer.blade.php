@@ -63,12 +63,12 @@ new class extends Component {
                         @if (count($selected) > 0)
                             <x-button
                                 class="dark:focus:!ring-darkdeletebutton dark:!bg-darkdeletebutton dark:!text-darkcontenttext dark:hover:!bg-darkdeletebuttonhover"
-                                x-on:click="$dispatch('pickid', { class: 'App\\\\Models\\\\Niveau', id: {{ json_encode($selected) }} }); $tsui.open.modal('deletedata')">
+                                x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Niveau')) }}', id: {{ json_encode($selected) }} }); $tsui.open.modal('deletedata')">
                                 Supprimer sélectionné ({{ count($selected) }})
                             </x-button>
                         @endif
                         <x-button x-on:click="$tsui.open.modal('createniveau')">
-                            Nouveau Niveau
+                            <x-codicon-add class="h-5 w-5" />Nouveau Niveau
                         </x-button>
                     </div>
                 </div>
@@ -81,7 +81,7 @@ new class extends Component {
                         Gérer les matieres
                     </button>
                     <button
-                        x-on:click="$dispatch('pickid', { class: 'App\\\\Models\\\\Niveau', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
+                        x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Niveau')) }}', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
                         type="button"
                         class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-red-500 hover:text-red-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                         Supprimer

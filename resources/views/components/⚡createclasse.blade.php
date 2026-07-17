@@ -1,9 +1,11 @@
 <?php
 
 use Livewire\Component;
+use TallStackUi\Traits\Interactions;
 
 new class extends Component {
-    public $message = null;
+    use Interactions;
+
     public $nom;
     public $description;
     public $annee_scolaire_id;
@@ -13,15 +15,13 @@ new class extends Component {
     public $heure_debut;
     public $heure_fin;
 
-    #[\Livewire\Attributes\On('reset-message')]
-    public function resetMessage()
-    {
-        $this->message = null;
-    }
-
     public function store()
     {
-        $this->validate([
+        $validated = $this->withValidator(function ($validator) {
+            if ($validator->fails()) {
+                $this->toast()->error('Erreur de validation', 'Veuillez vérifier les informations saisies.')->send();
+            }
+        })->validate([
             'nom' => 'required|string|max:50',
             'description' => 'nullable|string',
             'annee_scolaire_id' => 'required|integer|exists:annee_scolaires,id',
@@ -44,119 +44,71 @@ new class extends Component {
         ]);
 
         $this->reset();
-        $this->dispatch('refreshtable');
-        $this->message = 'Classe ajoutée avec succès !';
+        $this->dispatch('refreshClasse');
+        
+        $this->toast()->success('Création réussie', 'La classe a été créée avec succès.')->send();
     }
 };
 ?>
 
 <div>
-    <div class="w-full my-3 ">
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                <strong>Erreur!</strong>
-                <ul class="mt-2 list-disc list-inside text-sm">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @else
-            @if ($message)
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" x-data
-                    x-init="setTimeout(() => $wire.resetMessage(), 3000)">
-                    <strong>Succès!</strong>
-                    <p>{{ $message }}</p>
-                </div>
-            @endif
-        @endif
-    </div>
+   
     <form wire:submit.prevent="store">
         @csrf
         <div class="grid grid-cols-2 w-full gap-4">
-            <div>
-                <label class="block text-sm font-medium mb-1">Nom</label>
-                <input type="text" wire:model="nom" id="nom" class="rounded-md border w-full p-2"
-                    placeholder="Gestion de production...">
-            </div>
+            <x-input label="Nom" wire:model="nom" id="nom" placeholder="Gestion de production..." />
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Description</label>
-                <input type="text" wire:model="description" id="description" class="rounded-md border w-full p-2"
-                    placeholder="Description....">
-            </div>
+            <x-input label="Description" wire:model="description" id="description" placeholder="Description...." />
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Programme</label>
-                <select wire:model="programme_id" id="programme_id" class="rounded-md border w-full p-2">
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">
-                        Sélectionner un programme</option>
-                    @foreach (\App\Models\Programme::all() as $programme)
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border"
-                            value="{{ $programme->id }}">{{ $programme->nom }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <x-select.native label="Programme" wire:model="programme_id" id="programme_id">
+                <option value="">Sélectionner un programme</option>
+                @foreach (\App\Models\Programme::all() as $programme)
+                    <option value="{{ $programme->id }}">{{ $programme->nom }}</option>
+                @endforeach
+            </x-select.native>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Année Scolaire</label>
-                <select wire:model="annee_scolaire_id" id="annee_scolaire_id" class="rounded-md border w-full p-2">
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">
-                        Sélectionner une année scolaire</option>
-                    @foreach (\App\Models\AnneeScolaire::all() as $annee)
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border"
-                            value="{{ $annee->id }}">{{ $annee->libelle }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <x-select.native label="Année Scolaire" wire:model="annee_scolaire_id" id="annee_scolaire_id">
+                <option value="">Sélectionner une année scolaire</option>
+                @foreach (\App\Models\AnneeScolaire::all() as $annee)
+                    <option value="{{ $annee->id }}">{{ $annee->libelle }}</option>
+                @endforeach
+            </x-select.native>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Professeur</label>
-                <select wire:model="professeur_id" id="professeur_id" class="rounded-md border w-full p-2">
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">
-                        Sélectionner un professeur</option>
-                    @foreach (\App\Models\User::where('role', 'professeur')->get() as $professeur)
-                        <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border"
-                            value="{{ $professeur->id }}">{{ $professeur->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <x-select.native label="Professeur" wire:model="professeur_id" id="professeur_id">
+                <option value="">Sélectionner un professeur</option>
+                @foreach (\App\Models\User::where('role', 'professeur')->get() as $professeur)
+                    <option value="{{ $professeur->id }}">{{ $professeur->name }}</option>
+                @endforeach
+            </x-select.native>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Jour</label>
-                <select wire:model="jour" id="jour" class="rounded-md border w-full p-2">
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="">
-                        Sélectionner un jour</option>
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="lundi">Lundi
-                    </option>
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="mardi">Mardi
-                    </option>
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="mercredi">
-                        Mercredi</option>
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="jeudi">Jeudi
-                    </option>
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="vendredi">
-                        Vendredi</option>
-                    <option class="dark:bg-white dark:text-black dark:hover:bg-slate-100 border" value="samedi">Samedi
-                    </option>
-                </select>
-            </div>
+            <x-select.native label="Jour" wire:model="jour" id="jour">
+                <option value="">Sélectionner un jour</option>
+                <option value="lundi">Lundi</option>
+                <option value="mardi">Mardi</option>
+                <option value="mercredi">Mercredi</option>
+                <option value="jeudi">Jeudi</option>
+                <option value="vendredi">Vendredi</option>
+                <option value="samedi">Samedi</option>
+            </x-select.native>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Heure Début</label>
-                <input type="time" wire:model="heure_debut" id="heure_debut" class="rounded-md border w-full p-2">
-            </div>
+            <x-input type="time" label="Heure Début" wire:model="heure_debut" id="heure_debut" />
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Heure Fin</label>
-                <input type="time" wire:model="heure_fin" id="heure_fin" class="rounded-md border w-full p-2">
-            </div>
+            <x-input type="time" label="Heure Fin" wire:model="heure_fin" id="heure_fin" />
         </div>
 
-        <button type="submit" wire:dispatch('reset-message')
-            class="mt-5 dark:bg-white dark:text-black dark:hover:bg-slate-100 flex-1 rounded-md bg-darkcontentbg hover:bg-[#3B3B3B] text-white px-4 py-2 cursor-pointer flex gap-2 items-center ">
-            <x-codicon-add class="h-5 w-5" /> Ajouter la Classe
-        </button>
+        <div class="flex gap-3 pt-4">
+            <x-button type="submit"
+                class="dark:!bg-darkaddbutton dark:text-black dark:focus:!ring-darkaddbuttonring
+  flex-1 rounded-md bg-darkcontentbg hover:!bg-darkaddbuttonhover text-white px-4 py-2 cursor-pointer ">
+                Ajouter la classe
+            </x-button>
+
+            <x-button type="button" x-on:click="$tsui.close.modal('createclasse')"
+                class=" dark:text-black 
+  flex-1 rounded-md   text-white px-4 py-2 cursor-pointer ">
+                Fermer
+            </x-button>
+        </div>
     </form>
 
 </div>
