@@ -15,4 +15,13 @@ class Programme extends Model
     {
         return $this->hasMany(Classe::class);
     }
+    public function niveaux()
+    {
+        return $this->hasMany(Niveau::class);
+    }
+    public function matieres()
+    {
+        return $this->hasManyThrough(Matiere::class, Niveau::class);
+    }
+
 }

@@ -32,6 +32,7 @@ new class extends Component {
             $this->dispatch('refreshfiliere');
             $this->dispatch('refreshmatiere');
             $this->dispatch('refreshClasse');
+            $this->dispatch('refreshPromotion');
 
             $this->itemid = null;
             $this->itemclass = null;

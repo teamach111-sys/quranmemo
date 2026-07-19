@@ -16,7 +16,7 @@ new class extends Component
 
         <div class="flex  justify-between gap-4 items-center">
 
-            <h1 class="font-bold text-[20px] ">Classes</h1>
+            <h1 class="font-bold text-[20px] ">Promotions</h1>
 
 
             <div class="flex gap-2 ">
@@ -29,6 +29,6 @@ new class extends Component
 
     
     <div class="mt-5">
-        <livewire:tableclasse/>
+        <livewire:tablepromotion />
     </div>
 </div>

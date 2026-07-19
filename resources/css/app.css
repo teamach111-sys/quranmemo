@@ -30,6 +30,7 @@
     
     --color-darkcontentbg: #24352C;         /* medium dark green, not near-black */
 --color-darkcontenttext: #F3F1E9;       /* warm ivory */
+--color-darksmalltext:#9199A6;
 --color-darksidebar: #1B2921;           /* slightly deeper green for sidebar contrast */
 --color-darkborder: #3C5347;            /* soft sage-green border */
 --color-darkbutton: #E0B94F;            /* warm gold — primary action */

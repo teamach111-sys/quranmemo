@@ -10,19 +10,19 @@ class Classe extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'nom',
-        'description',
-        'annee_scolaire_id',
+        'promotion_id',
+        'matiere_id',
         'professeur_id',
-        'programme_id',
+        'groupe',
+        'salle',
         'jour',
         'heure_debut',
         'heure_fin',
     ];
 
-    public function annee_scolaire()
+    public function matiere()
     {
-        return $this->belongsTo(AnneeScolaire::class);
+        return $this->belongsTo(Matiere::class);
     }
 
     public function professeur()
@@ -30,13 +30,27 @@ class Classe extends Model
         return $this->belongsTo(User::class, 'professeur_id');
     }
 
-    public function programme()
-    {
-        return $this->belongsTo(Programme::class);
-    }
-
-    public function students()
+    public function etudiants()
     {
         return $this->hasMany(Etudiant::class);
     }
+
+    public function getNiveauAttribute()
+    {
+        return $this->matiere?->niveau;
+    }
+
+    public function getProgrammeAttribute()
+    {
+        return $this->matiere?->niveau?->programme;
+    }
+
+    public function getAnneeEtudeAttribute()
+    {
+        return $this->matiere?->annee_etude;
+    }
+    public function promotion()
+{
+    return $this->belongsTo(Promotion::class);
+}
 }

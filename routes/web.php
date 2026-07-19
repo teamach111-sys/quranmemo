@@ -19,11 +19,12 @@ Route::middleware(['auth', 'verified', 'can:admin'])->group(function () {
 });
 Route::middleware(['auth', 'verified', 'can:view-etudiants'])->group(function () {
     Route::livewire('createetudiant', '⚡createetudiant')->name('createetudiant');
-    Route::livewire('classes', '⚡classe')->name('classes');
+    Route::livewire('promotions', '⚡promotion')->name('promotions');
     Route::livewire('etudiants', '⚡etudiants')->name('etudiants');
 
     Route::livewire('/filieregerer/{programme}', '⚡filieregerer')->name('filiere');
     Route::livewire('/matieregerer/{niveau}', '⚡matieregerer')->name('matiere');
+    Route::livewire('/classe/{promotion}', '⚡tableclasse')->name('classes');
 
 });
 Route::middleware(['auth', 'verified', 'can:view-programme'])->group(function () {
