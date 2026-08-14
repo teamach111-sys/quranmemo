@@ -68,9 +68,11 @@ new class extends Component {
             </div>
         </div>
 
-        <x-button type="submit" wire:dispatch('reset-message') class="mt-4 ">
+        <x-button type="submit" wire:dispatch('reset-message') class="mt-4 dark:!bg-darkaddbutton dark:text-black dark:focus:!ring-darkaddbuttonring
+  flex-1 rounded-md bg-darkcontentbg hover:!bg-darkaddbuttonhover text-white px-4 py-2 cursor-pointer ">
             <x-codicon-add class="h-5 w-5" /> Ajouter l'Année
         </x-button>
+       
     </form>
 
 

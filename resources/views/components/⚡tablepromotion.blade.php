@@ -13,7 +13,6 @@ new class extends Component {
     public int $quantity = 10;
     public array $selected = [];
 
-    // Keep the sync intact with the URL bar (?annee=X)
     #[Url(as: 'annee')]
     public $activeAnneeId = '';
 
@@ -22,14 +21,10 @@ new class extends Component {
         'direction' => 'desc',
     ];
 
-    /**
-     * Boot runs before mount and on every subsequent hydrate request.
-     * This ensures the active year is caught correctly without overwriting URL parameters.
-     */
+   
     public function boot()
     {
         if (empty($this->activeAnneeId)) {
-            // First look at the persistent session value, then fallback to the current active year
             $this->activeAnneeId = session('active_annee_id', function() {
                 return \App\Models\AnneeScolaire::where('est_en_cours', true)->first()?->id;
             });
@@ -65,13 +60,11 @@ new class extends Component {
                 ->join('niveaux', 'promotions.niveau_id', '=', 'niveaux.id')
                 ->select('promotions.*', 'programmes.nom as programme_nom', 'niveaux.nom as niveau_nom')
                 
-                // Enforce the global selected school year restriction safely
                 ->when(
                     $this->activeAnneeId, 
                     fn($query) => $query->where('promotions.annee_scolaire_id', $this->activeAnneeId)
                 )
                 
-                // Grouped search check targeting absolute table columns
                 ->when(
                     trim($this->search),
                     fn($query) => $query->where(function($q) {

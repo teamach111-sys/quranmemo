@@ -21,7 +21,7 @@ Route::middleware(['auth', 'verified', 'can:view-etudiants'])->group(function ()
     Route::livewire('createetudiant', '⚡createetudiant')->name('createetudiant');
     Route::livewire('promotions', '⚡promotion')->name('promotions');
     Route::livewire('etudiants', '⚡etudiants')->name('etudiants');
-
+    Route::livewire('/emploit/{promotion}/{groupe}','⚡emploit')->name('emploit');
     Route::livewire('/filieregerer/{programme}', '⚡filieregerer')->name('filiere');
     Route::livewire('/matieregerer/{niveau}', '⚡matieregerer')->name('matiere');
     Route::livewire('/classe/{promotion}', '⚡tableclasse')->name('classes');

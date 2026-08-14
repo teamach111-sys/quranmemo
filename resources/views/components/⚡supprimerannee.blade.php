@@ -52,7 +52,8 @@ new class extends Component {
             </x-select.native>
         </div>
         <x-button wire:click="supprimerlannee"
-            class=""><x-uiw-delete
+            class=" dark:!bg-darkaddbutton dark:text-black dark:focus:!ring-darkaddbuttonring
+  flex-1 rounded-md bg-darkcontentbg hover:!bg-darkaddbuttonhover text-white px-4 py-2 cursor-pointer "><x-uiw-delete
                 class="w-5 h-5" />Supprimer
             l'Année</x-button>
 

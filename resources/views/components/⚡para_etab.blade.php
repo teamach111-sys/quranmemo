@@ -36,4 +36,9 @@ new class extends Component {};
     <div class="mt-5 border border-darkborder rounded-md p-4 w-fit">
         <livewire:donnerrole />
     </div>
+     <div class="mt-5 border border-darkborder rounded-md p-4 w-fit">
+        <livewire:createsalle />
+        <hr class="border-t dark:border-darkborder my-6" />
+        <livewire:creategroupe />
+    </div>
 </div>

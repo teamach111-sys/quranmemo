@@ -40,7 +40,7 @@ new class extends Component {
         $this->validate([
             'matiere_id' => 'required|integer|exists:matieres,id',
             'professeur_id' => 'required|integer|exists:users,id',
-            'groupe' => 'required|in:matin,soir,nuit',
+            'groupe' => 'required|string',
             'salle' => 'required|string',
             'jour' => 'required|string',
             'heure_debut' => 'required|date_format:H:i',
@@ -79,13 +79,19 @@ new class extends Component {
             </x-select.native>
 
             <x-select.native wire:model="groupe" label="Groupe" id="groupe">
-                <option value="matin">Matin</option>
-                <option value="nuit">Nuit</option>
-                <option value="soir">Soir</option>
+                <option value="">Choisir le Groupe</option>
+                @foreach(\App\Models\Groupe::all() as $groupe)
+                <option value="{{ $groupe->nom }}">{{ $groupe->nom }}</option>
+                @endforeach
             </x-select.native>
 
-            <x-input type="text" label="Salle" wire:model="salle" placeholder="101, 102, etc" id="salle" />
-
+            <x-select.native wire:model="salle" label="Salle" id="salle">
+                <option value="">Sélectionner une salle</option>
+                @foreach (\App\Models\Salle::all() as $salle)
+                    <option value="{{ $salle->nom }}">{{ $salle->nom }}</option>
+                @endforeach
+            </x-select.native>
+            
             <x-select.native wire:model="professeur_id" label="Professeur" id="professeur_id">
                 <option value="">Sélectionner un professeur</option>
                 @foreach (User::where('role', 'professeur')->get() as $professeur)

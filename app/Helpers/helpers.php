@@ -1,7 +1,8 @@
 <?php
 
-    function deleteClass($model)
-    {
-        $link = 'App\\Models\\' . $model;
-        return $link;
-    }
+
+function deleteClass($model)
+{
+    $link = 'App\\Models\\' . $model;
+    return $link;
+}

@@ -23,12 +23,14 @@ new class extends Component {
         $this->resetPage();
         $this->selected = [];
     }
-  
+    
     public function with(): array
     {
         return [
-            'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'nom', 'label' => 'Nom'], ['index' => 'prenom', 'label' => 'Prénom'], ['index' => 'sexe', 'label' => 'Sexe'], ['index' => 'date_naissance', 'label' => 'Date de naissance'], ['index' => 'telephone', 'label' => 'Téléphone'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
+            'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'nom', 'label' => 'Nom'], ['index' => 'prenom', 'label' => 'Prénom'], ['index' => 'sexe', 'label' => 'Sexe'], ['index' => 'date_naissance', 'label' => 'Date de naissance'], ['index' => 'age', 'label' => 'Age'], ['index' => 'telephone', 'label' => 'Téléphone'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
             'rows' => \App\Models\Etudiant::query()
+                ->select('*')
+                ->selectRaw("CAST(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', date_naissance) as int) as age")
                 ->when(
                     $this->search,
                     fn($query) => $query
@@ -40,6 +42,7 @@ new class extends Component {
                 ->paginate($this->quantity)
                 ->withQueryString(),
         ];
+        
     }
 };
 ?>

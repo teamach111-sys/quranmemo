@@ -54,7 +54,8 @@ new class extends Component {
         </div>
     </div>
     <x-button wire:click="assignerRole"
-        class="mt-4"><x-uiw-check
+        class="mt-4 dark:!bg-darkaddbutton dark:text-black dark:focus:!ring-darkaddbuttonring
+  flex-1 rounded-md bg-darkcontentbg hover:!bg-darkaddbuttonhover text-white px-4 py-2 cursor-pointer "><x-uiw-check
             class="w-5 h-5" />Assigner le Rôle</x-button>
 
 </div>

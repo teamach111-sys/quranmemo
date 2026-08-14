@@ -3,11 +3,19 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\AnneeScolaire;
+use App\Models\Salle;
+use App\Models\Programme;
+use App\Models\Niveau;
+use App\Models\Matiere;
+use App\Models\Promotion;
+use App\Models\Classe;
+use App\Models\User;
 
-class ProgrammeSeeder extends Seeder
+class sa extends Seeder
 {
     /**
-     * Seed programmes, niveaux, matieres, and etudiants.
+     * Seed programmes, niveaux, matieres, salles, annee scolaire, promotions, classes, and etudiants.
      */
     public function run(): void
     {
@@ -129,25 +137,100 @@ class ProgrammeSeeder extends Seeder
             ]
         ];
 
-        // Seed Programmes, Niveaux, and Matieres
+        // ── 1. Seed Active Année Scolaire ──
+        $annee = AnneeScolaire::create([
+            'libelle' => '2025-2026',
+            'date_debut' => '2025-09-01',
+            'date_fin' => '2026-07-31',
+            'est_en_cours' => true,
+        ]);
+
+        // ── 2. Seed Salles ──
+        $salle1 = Salle::create(['nom' => '1', 'capacite' => 35]);
+        $salle2 = Salle::create(['nom' => '2', 'capacite' => 35]);
+
+        // ── 3. Seed Professeurs ──
+        $professeurNames = [
+            'Ahmed El Amrani', 'Fatima Benali', 'Rachid Tazi',
+            'Khadija El Idrissi', 'Omar Chraibi', 'Samira Hajji',
+            'Mehdi Lahlou', 'Nour Bennani',
+        ];
+        $professeurs = [];
+        foreach ($professeurNames as $i => $name) {
+            $professeurs[] = User::create([
+                'name' => $name,
+                'email' => 'prof' . ($i + 1) . '@memoq.test',
+                'password' => bcrypt('password'),
+                'role' => 'professeur',
+            ]);
+        }
+
+        // ── 4. Seed Programmes, Niveaux, Matieres, Promotions & Classes ──
+        $jours = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+
         foreach ($data as $item) {
-            $programme = \App\Models\Programme::create([
+            $programme = Programme::create([
                 'nom' => $item['nom'],
             ]);
 
-            $niveau = \App\Models\Niveau::create([
+            $niveau = Niveau::create([
                 'nom' => $item['niveau'],
                 'programme_id' => $programme->id,
                 'nombre_annees' => $item['duree_annees'],
             ]);
 
-            foreach ($item['matieres'] as $annee => $matieres) {
+            foreach ($item['matieres'] as $anneeEtude => $matieres) {
+                $matiereModels = [];
                 foreach ($matieres as $matiereNom) {
-                    \App\Models\Matiere::create([
+                    $matiereModels[] = Matiere::create([
                         'nom' => $matiereNom,
                         'niveau_id' => $niveau->id,
-                        'annee_etude' => $annee,
+                        'annee_etude' => $anneeEtude,
                     ]);
+                }
+
+                // Create a Promotion for this programme/year combo
+                $promotion = Promotion::create([
+                    'annee_scolaire_id' => $annee->id,
+                    'programme_id' => $programme->id,
+                    'niveau_id' => $niveau->id,
+                    'annee_etude' => $anneeEtude,
+                ]);
+
+                // Create Classes: groupe soir, 6 days × 2 slots
+                // Salle 1 → 15:00-16:30, Salle 2 → 16:30-18:00
+                // Each slot gets a different matiere (cycling through available matieres)
+                $matiereIndex = 0;
+                $totalMatieres = count($matiereModels);
+
+                foreach ($jours as $jour) {
+                    // Classe 1: 15:00 - 16:30 in salle 1
+                    $prof1 = $professeurs[array_rand($professeurs)];
+                    Classe::create([
+                        'promotion_id' => $promotion->id,
+                        'matiere_id' => $matiereModels[$matiereIndex % $totalMatieres]->id,
+                        'professeur_id' => $prof1->id,
+                        'groupe' => 'soir',
+                        'salle' => $salle1->nom,
+                        'jour' => $jour,
+                        'heure_debut' => '15:00',
+                        'heure_fin' => '16:30',
+                    ]);
+                    $matiereIndex++;
+
+                    // Classe 2: 16:30 - 18:00 in salle 2
+                    $prof2 = $professeurs[array_rand($professeurs)];
+                    Classe::create([
+                        'promotion_id' => $promotion->id,
+                        'matiere_id' => $matiereModels[$matiereIndex % $totalMatieres]->id,
+                        'professeur_id' => $prof2->id,
+                        'groupe' => 'soir',
+                        'salle' => $salle2->nom,
+                        'jour' => $jour,
+                        'heure_debut' => '16:30',
+                        'heure_fin' => '18:00',
+                    ]);
+                    $matiereIndex++;
                 }
             }
         }
