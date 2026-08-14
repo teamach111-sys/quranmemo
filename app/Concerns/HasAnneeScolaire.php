@@ -11,6 +11,6 @@ trait HasAnneeScolaire
     {
         $anneeId = session('selected_annee_id');
 
-        return $query->when($anneeId, fn ($q) => $q->where('annee_id', $anneeId));
+        return $query->when($anneeId, fn ($q) => $q->where('annee_scolaire_id', $anneeId));
     }
 }

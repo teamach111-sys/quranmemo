@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AnneeScolaire;
 use App\Models\Promotion;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -10,9 +11,10 @@ new class extends Component {
     public $selectedannee;
 
     public function mount()
-    {
-        $this->selectedannee = session('selected_annee_id');
-    }
+{
+    $this->selectedannee = session('selected_annee_id') 
+        ?? AnneeScolaire::where('est_en_cours', true)->value('id');
+}
 
     #[On('anneeChanged')]
     public function updateAnnee($id)
