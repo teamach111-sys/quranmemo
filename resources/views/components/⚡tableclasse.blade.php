@@ -30,12 +30,6 @@ new class extends Component {
         }
     }
 
-    #[\Livewire\Attributes\On('global-annee-changed')]
-    public function updateClasseFilter($filterId)
-    {
-        $this->activeAnneeId = $filterId;
-        $this->resetPage();
-    }
     #[\Livewire\Attributes\On('refreshClasse')]
     public function refreshClasse()
     {

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Concerns\HasAnneeScolaire;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Etudiant extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasAnneeScolaire;
     protected $fillable = [
         'nom',
         'prenom',

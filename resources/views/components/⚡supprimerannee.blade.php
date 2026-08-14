@@ -17,7 +17,6 @@ new class extends Component {
             \App\Models\AnneeScolaire::destroy($this->anneeselecte);
             $this->anneeselecte = null;
             $this->jibannees1();
-            $this->dispatch('annee-cree');
             $this->toast()->success('Suppression réussie', 'L\'année scolaire a été supprimée avec succès.')->send();
 
 

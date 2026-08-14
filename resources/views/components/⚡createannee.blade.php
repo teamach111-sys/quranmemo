@@ -29,7 +29,6 @@ new class extends Component {
             'est_en_cours' => $this->est_en_cours,
         ]);
         $this->reset();
-        $this->dispatch('annee-cree');
         $this->dispatch('actualiser-annee');
         $this->toast()->success('Création réussie', 'L\'année scolaire a été créée avec succès.')->send();
     }

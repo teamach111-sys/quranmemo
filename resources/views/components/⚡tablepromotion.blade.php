@@ -1,41 +1,38 @@
 <?php
 
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\Attributes\Url;
-use Livewire\WithoutUrlPagination;
 use App\Models\Promotion;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
+use Livewire\Component;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
+new class extends Component{
 
-new class extends Component {
     use WithPagination, WithoutUrlPagination;
-
+    
     public ?string $search = '';
     public int $quantity = 10;
     public array $selected = [];
-
-    #[Url(as: 'annee')]
-    public $activeAnneeId = '';
+    public $selectedannee;
 
     public array $sort = [
         'column' => 'id',
         'direction' => 'desc',
     ];
 
-   
-    public function boot()
+    public function mount()
     {
-        if (empty($this->activeAnneeId)) {
-            $this->activeAnneeId = session('active_annee_id', function() {
-                return \App\Models\AnneeScolaire::where('est_en_cours', true)->first()?->id;
-            });
-        }
+        $this->selectedannee = session('selected_annee_id');
+       
     }
 
-    #[\Livewire\Attributes\On('global-annee-changed')]
-    public function updateClasseFilter($filterId)
+
+    #[On('anneeChanged')]
+    public function updateAnnee($id)
     {
-        $this->activeAnneeId = $filterId;
+        $this->selectedannee = $id;
         $this->resetPage();
+        $this->selected = [];
     }
 
     #[\Livewire\Attributes\On('refreshPromotion')]
@@ -48,30 +45,21 @@ new class extends Component {
     public function with(): array
     {
         return [
-            'headers' => [
-                ['index' => 'id', 'label' => '#'], 
-                ['index' => 'programme_nom', 'label' => 'Filière'], 
-                ['index' => 'niveau_nom', 'label' => 'Niveau'], 
-                ['index' => 'annee_etude', 'label' => 'Année Étude'], 
-                ['index' => 'action', 'label' => 'Action', 'sortable' => false]
-            ],
+            'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'programme_nom', 'label' => 'Filière'], ['index' => 'niveau_nom', 'label' => 'Niveau'], ['index' => 'annee_etude', 'label' => 'Année Étude'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
             'rows' => Promotion::query()
                 ->join('programmes', 'promotions.programme_id', '=', 'programmes.id')
                 ->join('niveaux', 'promotions.niveau_id', '=', 'niveaux.id')
                 ->select('promotions.*', 'programmes.nom as programme_nom', 'niveaux.nom as niveau_nom')
-                
-                ->when(
-                    $this->activeAnneeId, 
-                    fn($query) => $query->where('promotions.annee_scolaire_id', $this->activeAnneeId)
-                )
-                
+
+                ->when($this->selectedannee, fn($query) => $query->where('promotions.annee_scolaire_id', $this->selectedannee))
+
                 ->when(
                     trim($this->search),
-                    fn($query) => $query->where(function($q) {
+                    fn($query) => $query->where(function ($q) {
                         $q->where('programmes.nom', 'like', "%{$this->search}%")
-                          ->orWhere('niveaux.nom', 'like', "%{$this->search}%")
-                          ->orWhere('promotions.annee_etude', 'like', "%{$this->search}%");
-                    })
+                            ->orWhere('niveaux.nom', 'like', "%{$this->search}%")
+                            ->orWhere('promotions.annee_etude', 'like', "%{$this->search}%");
+                    }),
                 )
                 ->orderBy(...array_values($this->sort))
                 ->paginate($this->quantity)
@@ -103,18 +91,18 @@ new class extends Component {
                 </div>
             </div>
         </x-slot:header>
-        
+
         @interact('column_annee_etude', $row)
             {{ $row->annee_etude }}{{ $row->annee_etude == 1 ? 'ère' : 'ème' }} Année
         @endinteract
-        
+
         @interact('column_action', $row)
             <div class="flex justify-left gap-4 items-center">
                 <button x-on:click="window.location.href = '{{ route('classes', $row->id) }}'" type="button"
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-red-500 hover:text-red-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Gérer les classes
                 </button>
-              
+
                 <button
                     x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Promotion')) }}', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
                     type="button"
