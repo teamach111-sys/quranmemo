@@ -10,6 +10,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'can:view-notes'])->group(function () {
     Route::livewire('notes', '⚡note')->name('notes');
+    Route::livewire('absence', '⚡absence')->name('absence');
+    Route::livewire('suivi', '⚡suivi')->name('suivi');
 });
 
 Route::middleware(['auth', 'verified', 'can:admin'])->group(function () {

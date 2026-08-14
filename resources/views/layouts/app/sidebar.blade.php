@@ -31,7 +31,18 @@
                         {{ __('Gestion des classes') }}
                     </flux:sidebar.item>
                 @endcanany
-
+                @can('view-absence')
+                  <flux:sidebar.item icon="clock" :href="route('absence')" :current="request()->routeIs('absence')"
+                        wire:navigate>
+                        {{ __('Absence d\'etudiants') }}
+                    </flux:sidebar.item>
+                @endcan
+                @can('view-suivi')
+                  <flux:sidebar.item icon="eye" :href="route('suivi')" :current="request()->routeIs('suivi')"
+                        wire:navigate>
+                        {{ __('Suivi pédagogique') }}
+                    </flux:sidebar.item>
+                @endcan
                 @can('view-notes')
                     <flux:sidebar.item icon="clipboard" :href="route('notes')" :current="request()->routeIs('notes')"
                         wire:navigate>

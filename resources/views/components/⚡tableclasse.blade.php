@@ -172,9 +172,10 @@ new class extends Component {
 
         @interact('column_action', $row)
             <div class="flex justify-left gap-4 items-center">
+                
                 <button type="button"
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-blue-500 hover:text-blue-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
-                    Éditer
+                    Modifier
                 </button>
                 <button
                     x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Classe')) }}', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"

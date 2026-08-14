@@ -76,6 +76,13 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('admin', function (User $user) {
             return in_array($user->role, ['administrateur']);
         });
+        Gate::define('view-suivi', function (User $user) {
+            return in_array($user->role, ['professeur', 'administrateur', 'secretaire']);
+        });
+        Gate::define('view-absence', function (User $user) {
+            return in_array($user->role, ['professeur', 'administrateur', 'secretaire']);
+        });
+
 
         Gate::define('sec', function (User $user) {
             return in_array($user->role, ['administrateur', 'secretaire']);
@@ -108,14 +115,15 @@ class AppServiceProvider extends ServiceProvider
             app()->isProduction(),
         );
 
-        Password::defaults(fn (): ?Password => app()->isProduction()
-            ? Password::min(12)
+        Password::defaults(
+            fn(): ?Password => app()->isProduction()
+                ? Password::min(12)
                 ->mixedCase()
                 ->letters()
                 ->numbers()
                 ->symbols()
                 ->uncompromised()
-            : null,
+                : null,
         );
     }
 }

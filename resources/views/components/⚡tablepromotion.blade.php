@@ -114,6 +114,7 @@ new class extends Component {
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-red-500 hover:text-red-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Gérer les classes
                 </button>
+              
                 <button
                     x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Promotion')) }}', id: {{ $row->id }} }); $tsui.open.modal('deletedata')"
                     type="button"
