@@ -17,7 +17,7 @@ new class extends Component {
 
     public function mount()
     {
-        $this->annee_scolaire_id = AnneeScolaire::where('est_active', true)->orWhere('est_en_cours', 1)->first()?->id;
+        $this->annee_scolaire_id = AnneeScolaire::Where('est_en_cours', 1)->first()?->id;
     }
 
     public function updatedProgrammeId()

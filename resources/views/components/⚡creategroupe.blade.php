@@ -1,12 +1,19 @@
 <?php
 
-use Livewire\Component;
+use App\Models\AnneeScolaire;
 use App\Models\Groupe;
+use Livewire\Component;
 use TallStackUi\Traits\Interactions;
+use TallStackUi\Facades\Toast;
 new class extends Component {
-    use Interactions;
-    public $nom;
+    use interactions;
 
+    public $nom;
+    public $selectedannee;
+
+    public function mount(){
+        $this->selectedannee = session('selected_annee_id') ?? AnneeScolaire::where('est_en_cours', true)->value('id');
+    }
     public function store()
     {
         $this->validate([
@@ -14,6 +21,7 @@ new class extends Component {
         ]);
         Groupe::create([
             'nom' => $this->nom,
+            'annee_scolaire_id' => $this->selectedannee,
         ]);
         $this->reset();
         $this->toast()->success('Création réussie', 'Le groupe a été créée avec succès.')->send();

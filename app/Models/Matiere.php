@@ -32,6 +32,7 @@ class Matiere extends Model
     {
         return $this->belongsTo(Programme::class);
     }
+  
 
     public function etudiant()
     {

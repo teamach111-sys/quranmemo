@@ -41,4 +41,6 @@ class Promotion extends Model
     {
         return $this->hasMany(Etudiant::class);
     }
+
+
 }

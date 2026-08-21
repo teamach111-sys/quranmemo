@@ -11,7 +11,13 @@ class Groupe extends Model
     use SoftDeletes, HasAnneeScolaire;
     protected $fillable = [
         'nom',    
+        'annee_scolaire_id',
     ];
+
+
+    public function anneescolaire(){
+        return $this->belongsTo(AnneeScolaire::class);
+    }
     
   
 }

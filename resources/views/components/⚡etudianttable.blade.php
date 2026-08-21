@@ -23,14 +23,14 @@ new class extends Component {
         $this->resetPage();
         $this->selected = [];
     }
-    
+
     public function with(): array
     {
         return [
             'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'nom', 'label' => 'Nom'], ['index' => 'prenom', 'label' => 'Prénom'], ['index' => 'sexe', 'label' => 'Sexe'], ['index' => 'date_naissance', 'label' => 'Date de naissance'], ['index' => 'age', 'label' => 'Age'], ['index' => 'telephone', 'label' => 'Téléphone'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
             'rows' => \App\Models\Etudiant::query()
                 ->select('*')
-                ->selectRaw("CAST(strftime('%Y.%m%d', 'now') - strftime('%Y.%m%d', date_naissance) as int) as age")
+                ->selectRaw('TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) as age')
                 ->when(
                     $this->search,
                     fn($query) => $query
@@ -42,7 +42,6 @@ new class extends Component {
                 ->paginate($this->quantity)
                 ->withQueryString(),
         ];
-        
     }
 };
 ?>
@@ -57,13 +56,14 @@ new class extends Component {
                 </div>
                 <div class="flex gap-2">
                     @if (count($selected) > 0)
-                        <x-button class="dark:focus:!ring-darkdeletebutton dark:!bg-darkdeletebutton dark:!text-darkcontenttext dark:hover:!bg-darkdeletebuttonhover"
+                        <x-button
+                            class="dark:focus:!ring-darkdeletebutton dark:!bg-darkdeletebutton dark:!text-darkcontenttext dark:hover:!bg-darkdeletebuttonhover"
                             x-on:click="$dispatch('pickid', { class: '{{ addslashes(deleteClass('Etudiant')) }}', id: {{ json_encode($selected) }} }); $tsui.open.modal('deletedata')">
                             Supprimer sélectionné ({{ count($selected) }})
                         </x-button>
                     @endif
                     <x-button x-on:click="$tsui.open.modal('createetudiant')">
-                       <x-codicon-add class="h-5 w-5" /> Nouveau etudiant
+                        <x-codicon-add class="h-5 w-5" /> Nouveau etudiant
                     </x-button>
                 </div>
             </div>

@@ -150,10 +150,17 @@ new class extends Component {
                         <x-elemplus-printer class="h-5 w-5" />Imprimer
                     </x-button>
                     @endif
+                      <x-button x-on:click="$tsui.open.modal('createclasse')">
+                        Voir les etudiants
+                    </x-button>
                     <x-button x-on:click="$tsui.open.modal('createclasse')">
-                        <x-codicon-add class="h-5 w-5" />Nouvelle Classe
+                        Ajouter etudiants
                     </x-button>
 
+                    <x-button x-on:click="$tsui.open.modal('createclasse')">
+                        Nouvelle Classe
+                    </x-button>
+                    
                 </div>
             </div>
         </x-slot:header>
