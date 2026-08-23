@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\AnneeScolaire;
-use App\Models\Salle;
-use App\Models\Programme;
-use App\Models\Niveau;
-use App\Models\Matiere;
-use App\Models\Promotion;
 use App\Models\Classe;
+use App\Models\Etudiant;
+use App\Models\Matiere;
+use App\Models\Niveau;
+use App\Models\Programme;
+use App\Models\Promotion;
+use App\Models\Salle;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class sa extends Seeder
 {
@@ -31,7 +34,7 @@ class sa extends Seeder
                         'Conception de Sites Web Statiques (HTML/CSS)',
                         'Programmation JavaScript Client-side',
                         'Bases de Données Relationnelles et SQL',
-                        'Soft Skills et Anglais Technique'
+                        'Soft Skills et Anglais Technique',
                     ],
                     2 => [
                         'Développement Back-end (PHP/Laravel ou Node.js)',
@@ -39,9 +42,9 @@ class sa extends Seeder
                         'Déploiement d\'Applications et Pratiques DevOps',
                         'Méthodologies Agiles et Gestion de Projet (Scrum)',
                         'Sécurité des Applications Web',
-                        'Projet de Fin d\'Etudes & Stage'
-                    ]
-                ]
+                        'Projet de Fin d\'Etudes & Stage',
+                    ],
+                ],
             ],
             [
                 'nom' => 'Infrastructure Digitale option Systèmes et Réseaux',
@@ -54,7 +57,7 @@ class sa extends Seeder
                         'Configuration des Commutateurs et Routeurs',
                         'Automatisation des Tâches d\'Administration (Scripting Bash/Python)',
                         'Sécurité Initiale des Systèmes d\'Information',
-                        'Culture et Techniques du Numérique'
+                        'Culture et Techniques du Numérique',
                     ],
                     2 => [
                         'Administration Réseau Sous Linux et Windows Server',
@@ -62,9 +65,9 @@ class sa extends Seeder
                         'Concepts et Architecture du Cloud Computing',
                         'Sécurisation des Infrastructures Réseaux (Firewalls, VPN)',
                         'Supervision et Monitoring de Parcs Informatiques',
-                        'Stage Pratique en Entreprise'
-                    ]
-                ]
+                        'Stage Pratique en Entreprise',
+                    ],
+                ],
             ],
             [
                 'nom' => 'Gestion des Entreprises option Comptabilité et Finance',
@@ -77,7 +80,7 @@ class sa extends Seeder
                         'Droit des Affaires et Droit du Travail',
                         'Outils Bureautiques et Tableurs Spécialisés (Excel)',
                         'Mathématiques Financières',
-                        'Communication Professionnelle'
+                        'Communication Professionnelle',
                     ],
                     2 => [
                         'Comptabilité Analytique d\'Exploitation',
@@ -85,9 +88,9 @@ class sa extends Seeder
                         'Fiscalité de l\'Entreprise (TVA, IS, IR)',
                         'Analyse Financière et Diagnostic',
                         'Logiciels de Gestion Comptable Intégrés (Sage)',
-                        'Projet Professionnel Appliqué'
-                    ]
-                ]
+                        'Projet Professionnel Appliqué',
+                    ],
+                ],
             ],
             [
                 'nom' => 'Diagnostic et Electronique Embarquée Automobile',
@@ -100,7 +103,7 @@ class sa extends Seeder
                         'Lecture et Interprétation de Schémas Électriques',
                         'Systèmes de Freinage et Liaison au Sol',
                         'Hygiène, Sécurité et Protection de l\'Environnement (HSE)',
-                        'Informatique Appliquée'
+                        'Informatique Appliquée',
                     ],
                     2 => [
                         'Systèmes d\'Injection Électronique (Essence et Diesel)',
@@ -108,9 +111,9 @@ class sa extends Seeder
                         'Multiplexage et Calculateurs Embarqués',
                         'Systèmes de Sécurité Active et Confort (ABS, ESP, Airbags)',
                         'Gestion d\'un Atelier de Réparation Automobile',
-                        'Stage Technique en Concessionnaire'
-                    ]
-                ]
+                        'Stage Technique en Concessionnaire',
+                    ],
+                ],
             ],
             [
                 'nom' => 'Technicien Comptable d\'Entreprises',
@@ -123,7 +126,7 @@ class sa extends Seeder
                         'Traitement des Pièces Comptables (Facturation)',
                         'Secrétariat et Correspondance Commerciale',
                         'Calculs Commerciaux de Base',
-                        'Arabe Professionnel'
+                        'Arabe Professionnel',
                     ],
                     2 => [
                         'Travaux d\'Inventaire et Clôture d\'Exercice',
@@ -131,10 +134,10 @@ class sa extends Seeder
                         'Traitement Informatique de la Comptabilité',
                         'Gestion de la Paie (Salaires et Cotisations CNSS)',
                         'Archivage et Gestion Documentaire',
-                        'Stage de Fin de Formation'
-                    ]
-                ]
-            ]
+                        'Stage de Fin de Formation',
+                    ],
+                ],
+            ],
         ];
 
         // ── 1. Seed Active Année Scolaire ──
@@ -275,7 +278,7 @@ class sa extends Seeder
                 $prenom = fake()->randomElement($prenomsFeminins);
             }
 
-            \App\Models\Etudiant::create([
+            Etudiant::create([
                 'nom' => fake()->randomElement($noms),
                 'prenom' => $prenom,
                 'sexe' => $sexe,

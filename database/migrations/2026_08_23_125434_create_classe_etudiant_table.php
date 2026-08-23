@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('promotions', function(Blueprint $table) {
+        Schema::create('classe_etudiant', function(Blueprint $table) {
             $table->id();
-            $table->foreignId('annee_scolaire_id')->constrained('annee_scolaires')->cascadeOnDelete();
-            $table->foreignId('programme_id')->constrained('programmes')->cascadeOnDelete();
-            $table->foreignId('niveau_id')->constrained('niveaux')->cascadeOnDelete();
-            $table->tinyInteger('annee_etude');
+            $table->foreignId('etudiant_id')->constrained('etudiants');
+            $table->foreignId('classe_id')->constrained('classes');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('promotions');
+        Schema::dropIfExists('classe_etudiant');
     }
 };

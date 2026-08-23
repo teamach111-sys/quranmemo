@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Concerns\HasAnneeScolaire;
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promotion extends Model
 {
-    use SoftDeletes, HasAnneeScolaire;
+    use HasAnneeScolaire, SoftDeletes;
 
     protected $fillable = [
         'annee_scolaire_id',
@@ -41,6 +43,4 @@ class Promotion extends Model
     {
         return $this->hasMany(Etudiant::class);
     }
-
-
 }

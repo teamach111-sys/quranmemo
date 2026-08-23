@@ -1,21 +1,35 @@
 <?php
-
+use App\Models\AnneeScolaire;
+use App\Models\Etudiant;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
 
-new class extends Component {
-    use WithPagination, WithoutUrlPagination;
+new class extends Component
+{
+    use WithoutUrlPagination, WithPagination;
 
     public int $quantity = 10;
     public ?string $search = '';
     public array $selected = [];
-
     public array $sort = [
         'column' => 'id',
         'direction' => 'desc',
     ];
+    public $selectedannee;
+
+    public function mount()
+    {
+        $this->selectedannee = session('selected_annee_id') ?? AnneeScolaire::where('est_en_cours', true)->value('id');
+    }
+
+    #[On('anneeChanged')]
+    public function onAnneeChanged($id)
+    {
+        $this->selectedannee = $id;
+        $this->selectpromo = null;
+    }
 
     #[On('refreshetudiants')]
     public function refreshEtudiants()
@@ -28,16 +42,17 @@ new class extends Component {
     {
         return [
             'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'nom', 'label' => 'Nom'], ['index' => 'prenom', 'label' => 'Prénom'], ['index' => 'sexe', 'label' => 'Sexe'], ['index' => 'date_naissance', 'label' => 'Date de naissance'], ['index' => 'age', 'label' => 'Age'], ['index' => 'telephone', 'label' => 'Téléphone'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
-            'rows' => \App\Models\Etudiant::query()
+            'rows' => Etudiant::query()
                 ->select('*')
                 ->selectRaw('TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) as age')
+                ->forCurrentAnnee()
                 ->when(
                     $this->search,
-                    fn($query) => $query
-                        ->where('nom', 'like', "%{$this->search}%")
-                        ->orWhere('prenom', 'like', "%{$this->search}%")
-                        ->orWhere('telephone', 'like', "%{$this->search}%"),
-                )
+                    fn ($query) => $query->where(function($q) {
+                        $q->where('nom', 'like', "%{$this->search}%")
+                            ->orWhere('prenom', 'like', "%{$this->search}%")
+                            ->orWhere('telephone', 'like', "%{$this->search}%");
+                    }))
                 ->orderBy(...array_values($this->sort))
                 ->paginate($this->quantity)
                 ->withQueryString(),
@@ -45,7 +60,6 @@ new class extends Component {
     }
 };
 ?>
-
 <div>
     <x-table selectable wire:model.live="selected" :$headers :$rows :$sort paginate>
         <x-slot:header>
@@ -68,7 +82,6 @@ new class extends Component {
                 </div>
             </div>
         </x-slot:header>
-
         @interact('column_action', $row)
             <div class="flex justify-left gap-4 items-center">
                 <button
@@ -79,13 +92,10 @@ new class extends Component {
                 </button>
             </div>
         @endinteract
-
     </x-table>
-
     <x-modal id="createetudiant" persistent center>
         <livewire:createetudiant />
     </x-modal>
-
     <x-modal id="deletedata" center class="dark:!bg-black">
         <livewire:suppmodal />
     </x-modal>

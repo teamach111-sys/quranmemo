@@ -59,6 +59,12 @@ new class extends Component {
                     @endforeach
                 </x-select.native>
                 <x-select.native wire:model.live="selectpromo" id="selectpromo">
+                    <option value="" disabled>Matière</option>
+                    @foreach ($matieres as $matiere)
+                        <option value="{{ $matiere->id }}">{{ $matiere->nom }}</option>
+                    @endforeach
+                </x-select.native>
+                <x-select.native wire:model.live="selectpromo" id="selectpromo">
                     <option value="">Sélectionner une promotion</option>
                     @foreach ($promotions as $promo)
                         <option value="{{ $promo->niveau_id }}">{{ $promo->programme->nom }} <p>

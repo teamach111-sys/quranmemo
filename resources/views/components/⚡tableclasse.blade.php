@@ -49,7 +49,7 @@ new class extends Component {
                 ->where('classes.promotion_id', $this->promotion->id)
                 ->select('classes.*', 'matieres.nom as matiere_nom', 'users.name as professeur_nom', 'promotions.annee_scolaire_id as annee_scolaire_id')
                 ->orderByRaw("CASE LOWER(jour) WHEN 'lundi' THEN 1 WHEN 'mardi' THEN 2 WHEN 'mercredi' THEN 3 WHEN 'jeudi' THEN 4 WHEN 'vendredi' THEN 5 WHEN 'samedi' THEN 6 WHEN 'dimanche' THEN 7 ELSE 8 END")
-                ->orderBy('heure_debut','ASC')
+                ->orderBy('heure_debut', 'ASC')
                 ->when($this->activeAnneeId, fn($query) => $query->where('promotions.annee_scolaire_id', $this->activeAnneeId))
                 ->when($this->selectedDay || $this->selectedGroupe || $this->selectedSalle, function ($query) {
                     if ($this->selectedDay) {
@@ -122,7 +122,7 @@ new class extends Component {
                         @foreach (\App\Models\Groupe::all() as $groupe)
                             <option value="{{ $groupe->nom }}">{{ $groupe->nom }}</option>
                         @endforeach
-                        
+
 
 
                     </x-select.native>
@@ -144,28 +144,26 @@ new class extends Component {
                             Supprimer sélectionné ({{ count($selected) }})
                         </x-button>
                     @endif
-                    @if($selectedGroupe)
-                    <x-button
-                        x-on:click="window.location.href = '{{ route('emploit', ['promotion' => $promotion, 'groupe' => $selectedGroupe]) }}'">
-                        <x-elemplus-printer class="h-5 w-5" />Imprimer
-                    </x-button>
+                    @if ($selectedGroupe)
+                        <x-button
+                            x-on:click="window.location.href = '{{ route('emploit', ['promotion' => $promotion, 'groupe' => $selectedGroupe]) }}'">
+                            <x-elemplus-printer class="h-5 w-5" />Imprimer
+                        </x-button>
                     @endif
-                      <x-button x-on:click="$tsui.open.modal('createclasse')">
-                        Voir les etudiants
-                    </x-button>
-                    <x-button x-on:click="$tsui.open.modal('createclasse')">
+
+                    <x-button x-on:click="$tsui.open.modal('ajouteretudiantaclasse')">
                         Ajouter etudiants
                     </x-button>
 
                     <x-button x-on:click="$tsui.open.modal('createclasse')">
                         Nouvelle Classe
                     </x-button>
-                    
+
                 </div>
             </div>
         </x-slot:header>
 
-        
+
 
         @interact('column_jour', $row)
             {{ ucfirst($row->jour) }}
@@ -173,7 +171,7 @@ new class extends Component {
 
         @interact('column_action', $row)
             <div class="flex justify-left gap-4 items-center">
-                
+
                 <button type="button"
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-blue-500 hover:text-blue-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Modifier
@@ -194,5 +192,8 @@ new class extends Component {
     </x-modal>
     <x-modal id="createclasse" center>
         <livewire:createclasse :promotion="$promotion" />
+    </x-modal>
+    <x-modal id="ajouteretudiantaclasse" center>
+        <livewire:ajouteretudiantaclassemodal :promotion="$promotion" />
     </x-modal>
 </div>

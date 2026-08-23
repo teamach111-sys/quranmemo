@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Models\User;
@@ -26,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         TallStackUi::customize()
             ->modal()
             ->block('wrapper.first', 'fixed inset-0 bg-overlayy transform transition-opacity')
@@ -67,39 +68,34 @@ class AppServiceProvider extends ServiceProvider
             ->button()
             ->block('wrapper.sizes.md', 'text-md px-5 py-3');
 
-
-
-
-
         $this->configureDefaults();
 
-        Gate::define('admin', function (User $user) {
+        Gate::define('admin', function(User $user) {
             return in_array($user->role, ['administrateur']);
         });
-        Gate::define('view-suivi', function (User $user) {
+        Gate::define('view-suivi', function(User $user) {
             return in_array($user->role, ['professeur', 'administrateur', 'secretaire']);
         });
-        Gate::define('view-absence', function (User $user) {
+        Gate::define('view-absence', function(User $user) {
             return in_array($user->role, ['professeur', 'administrateur', 'secretaire']);
         });
 
-
-        Gate::define('sec', function (User $user) {
+        Gate::define('sec', function(User $user) {
             return in_array($user->role, ['administrateur', 'secretaire']);
         });
 
-        Gate::define('prof', function (User $user) {
+        Gate::define('prof', function(User $user) {
             return $user->role === 'professeur';
         });
 
-        Gate::define('view-notes', function (User $user) {
+        Gate::define('view-notes', function(User $user) {
             return in_array($user->role, ['administrateur', 'secretaire', 'professeur']);
         });
 
-        Gate::define('view-etudiants', function (User $user) {
+        Gate::define('view-etudiants', function(User $user) {
             return in_array($user->role, ['administrateur', 'secretaire']);
         });
-        Gate::define('view-programme', function (User $user) {
+        Gate::define('view-programme', function(User $user) {
             return in_array($user->role, ['administrateur', 'secretaire']);
         });
     }
@@ -116,13 +112,13 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Password::defaults(
-            fn(): ?Password => app()->isProduction()
+            fn (): ?Password => app()->isProduction()
                 ? Password::min(12)
-                ->mixedCase()
-                ->letters()
-                ->numbers()
-                ->symbols()
-                ->uncompromised()
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
                 : null,
         );
     }

@@ -4,7 +4,9 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "format": "./vendor/bin/pint",
+        "format:check": "./vendor/bin/pint --test"
     },
     "dependencies": {
         "@laravel/passkeys": "^0.2.0",
@@ -24,6 +26,8 @@
     },
     "devDependencies": {
         "@emnapi/core": "^1.11.1",
-        "@emnapi/runtime": "^1.11.1"
+        "@emnapi/runtime": "^1.11.1",
+        "@shufo/prettier-plugin-blade": "^1.16.2",
+        "prettier": "^3.9.6"
     }
 }

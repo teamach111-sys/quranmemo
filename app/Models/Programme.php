@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Concerns\HasAnneeScolaire;
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Programme extends Model
 {
-    use SoftDeletes, HasAnneeScolaire;
+    use HasAnneeScolaire, SoftDeletes;
 
     protected $fillable = ['nom', 'description'];
 
@@ -16,13 +18,14 @@ class Programme extends Model
     {
         return $this->hasMany(Classe::class);
     }
+
     public function niveaux()
     {
         return $this->hasMany(Niveau::class);
     }
+
     public function matieres()
     {
         return $this->hasManyThrough(Matiere::class, Niveau::class);
     }
-
 }

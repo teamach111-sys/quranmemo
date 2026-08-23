@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('matieres', function(Blueprint $table) {
+        Schema::create('absence', function(Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->foreignId('niveau_id')->constrained()->cascadeOnDelete();
-            $table->string('description')->nullable();
-            $table->string('annee_etude');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('matieres');
+        Schema::dropIfExists('absence');
     }
 };

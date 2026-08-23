@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Concerns\HasAnneeScolaire;
@@ -8,9 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Etudiant extends Model
 {
-    use SoftDeletes, HasAnneeScolaire;
+    use HasAnneeScolaire, SoftDeletes;
+
     protected $fillable = [
         'nom',
+        'annee_scolaire_id',
+        'promotion_id',
         'prenom',
         'photo',
         'sexe',
@@ -23,4 +28,17 @@ class Etudiant extends Model
         'parent_relation',
         'est_actif',
     ];
+
+    public function promotion()
+    {
+        return $this->belongsTo(promotion::class);
+    }
+
+    public function classes()
+    {
+        return $this->hasMany(classe::class, 'promotion_id', 'promotion_id');
+    }
+    public function anneeScolaire(){
+        return $this->belongsTo(AnneeScolaire::class);
+    }
 }

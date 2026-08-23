@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Fortify\Features;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Fortify Guard
@@ -173,5 +174,4 @@ return [
             'confirmPassword' => true,
         ]),
     ],
-
 ];
