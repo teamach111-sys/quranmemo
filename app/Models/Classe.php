@@ -14,6 +14,7 @@ class Classe extends Model
 
     protected $fillable = [
         'promotion_id',
+        'periode_id',
         'matiere_id',
         'professeur_id',
         'groupe',

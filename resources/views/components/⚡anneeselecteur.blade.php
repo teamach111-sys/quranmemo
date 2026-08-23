@@ -8,6 +8,7 @@ new class extends Component
     public $annees;
     public $selectedannee;
 
+    #[\Livewire\Attributes\On('reloadAnnees')]
    public function mount()
 {
     $this->annees = AnneeScolaire::all();

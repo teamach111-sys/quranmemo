@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->foreignId('annee_scolaire_id')->constrained('annee_scolaires');
+            $table->foreignId('groupe_id')->constrained('groupes');
             $table->foreignId('promotion_id')->constrained('promotions');
             $table->string('prenom');
             $table->string('photo')->nullable();

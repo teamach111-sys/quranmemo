@@ -1,11 +1,11 @@
 <?php
 use App\Models\Etudiant;
-use App\Models\Promotion;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use TallStackUi\Traits\Interactions;
-new class extends Component {
+new class extends Component
+{
     use Interactions, WithFileUploads;
     public $nom;
     public $prenom;
@@ -22,15 +22,18 @@ new class extends Component {
     public $message;
     public $promo = '';
     public $selectedannee;
- 
-    public function mount(){
-        $this->selectedannee = session('selected_annee_id')?? AnneeScolaire::where('est_en_cours', true)->value('id');
+    public $groupe;
+    public function mount()
+    {
+        $this->selectedannee = session('selected_annee_id') ?? \App\Models\AnneeScolaire::where('est_en_cours', true)->value('id');
     }
     public function render()
     {
-        $promotions = Promotion::with('programme')->get();
+        $groupes = \App\Models\Groupe::all();
+        $promotions = \App\Models\Promotion::with('programme')->get();
         return view('⚡createetudiant', [
             'promotions' => $promotions,
+            'groupes' => $groupes,
         ]);
     }
     #[On('refreshupload')]
@@ -58,7 +61,7 @@ new class extends Component {
         if ($this->photo) {
             $path = $this->photo->store('photos', 'public');
         }
-        Etudiant::create(['nom' => $this->nom, 'annee_scolaire_id'=> $this->selectedannee, 'promotion_id' => $this->promo, 'photo' => $path, 'prenom' => $this->prenom, 'sexe' => $this->sexe, 'date_naissance' => $this->date_naissance, 'telephone' => $this->telephone, 'email' => $this->email, 'adresse' => $this->adresse, 'parent_nom' => $this->parent_nom, 'parent_telephone' => $this->parent_telephone, 'parent_relation' => $this->parent_relation, 'est_actif' => $this->est_actif]);
+        Etudiant::create(['nom' => $this->nom, 'annee_scolaire_id' => $this->selectedannee, 'groupe_id' => $this->groupe, 'promotion_id' => $this->promo, 'photo' => $path, 'prenom' => $this->prenom, 'sexe' => $this->sexe, 'date_naissance' => $this->date_naissance, 'telephone' => $this->telephone, 'email' => $this->email, 'adresse' => $this->adresse, 'parent_nom' => $this->parent_nom, 'parent_telephone' => $this->parent_telephone, 'parent_relation' => $this->parent_relation, 'est_actif' => $this->est_actif]);
         $this->reset();
         $this->dispatch('refreshetudiants');
         $this->toast()->success('L\'étudiant a été créé avec succès')->send();
@@ -79,7 +82,6 @@ new class extends Component {
 <div class="w-200">
     <form class="flex flex-col gap-4 w-full" wire:submit.prevent="store"
         wire:loading.class="opacity-50 cursor-not-allowed">
-     
         <!-- tlmid -->
         <div class="grid grid-cols-3 gap-4">
             <div>
@@ -115,6 +117,14 @@ new class extends Component {
                     <option value="">Sélectionnez la promotion</option>
                     @foreach ($promotions as $promo)
                         <option value="{{ $promo->id }}">{{ $promo->programme->nom }}</option>
+                    @endforeach
+                </x-select.native>
+            </div>
+            <div>
+                 <x-select.native label="Groupe" wire:model="groupe">
+                    <option value="">Sélectionnez un groupe</option>
+                    @foreach ($groupes as $groupe)
+                        <option value="{{ $groupe->id }}">{{ $groupe->nom }}</option>
                     @endforeach
                 </x-select.native>
             </div>

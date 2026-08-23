@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('promotion_id')->constrained('promotions')->cascadeOnDelete();
             $table->foreignId('matiere_id')->constrained('matieres')->cascadeOnDelete();
             $table->foreignId('professeur_id')->constrained('users')->cascadeonDelete();
+            $table->foreignId('periode_id')->constrained('periodes')->cascadeOnDelete();
             $table->string('groupe');
             $table->string('salle')->nullable();
             $table->enum('jour', ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'])->nullable();

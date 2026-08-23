@@ -15,6 +15,16 @@ return new class extends Migration
     {
         Schema::create('absence', function(Blueprint $table) {
             $table->id();
+            $table->date('date');
+            $table->foreignId('classe_id')->constrained('classes')->onDelete('cascade');
+            $table->foreignId('etudiant_id')->constrained('etudiants')->onDelete('cascade');
+            $table->boolean('isArchived')->default(false);
+            $table->text('observation')->nullable();
+            $table->foreignId('annee_scolaire_id')->constrained('annee_scolaires')->onDelete('cascade');
+            $table->boolean('isPresent');
+            $table->index(['etudiant_id', 'date']);
+            $table->index(['isArchived']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

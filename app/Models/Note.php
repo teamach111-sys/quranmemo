@@ -1,24 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models;
 
 use App\Concerns\HasAnneeScolaire;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Presence extends Model
+class Note extends Model
 {
     use HasAnneeScolaire, SoftDeletes;
-
     protected $fillable = [
-        'date',
-        'classe_id',
+        'promotion_id',
         'etudiant_id',
-        'isArchived',
-        'observation',
-        'annee_scolaire_id',
-        'isPresent'
+        'note',
+        'observation'
     ];
 }

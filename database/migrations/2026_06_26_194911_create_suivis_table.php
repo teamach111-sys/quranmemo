@@ -15,15 +15,16 @@ return new class extends Migration
     {
         Schema::create('suivis', function(Blueprint $table) {
             $table->id();
-            $table->date('createdate');
-            $table->foreignId('promotion_id')->constrained('promotions')->onDelete('cascade');
-            $table->foreignId('groupe_id')->constrained('groupes')->onDelete('cascade');
+            $table->date('date');
+            $table->foreignId('classe_id')->constrained('classes')->onDelete('cascade');
             $table->foreignId('etudiant_id')->constrained('etudiants')->onDelete('cascade');
-            $table->boolean('isArchived');
+            $table->boolean('isArchived')->default(false);
             $table->text('observation')->nullable();
             $table->foreignId('sourate_id')->constrained('sourates');
             $table->foreignId('annee_scolaire_id')->constrained('annee_scolaires')->onDelete('cascade');
             $table->string('etat_de_recitation');
+            $table->index(['etudiant_id', 'date']);
+            $table->index(['isArchived']);
             $table->timestamps();
         });
     }

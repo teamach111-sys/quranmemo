@@ -11,4 +11,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Suivi extends Model
 {
     use HasAnneeScolaire, SoftDeletes;
+    protected $fillable = [
+        'date',
+        'classe_id',
+        'etudiant_id',
+        'isArchived',
+        'observation',
+        'sourate_id',
+        'annee_scolaire_id',
+        'etat_de_recitation'
+        
+    ];
 }

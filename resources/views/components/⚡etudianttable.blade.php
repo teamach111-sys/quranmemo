@@ -5,11 +5,9 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
-
 new class extends Component
 {
     use WithoutUrlPagination, WithPagination;
-
     public int $quantity = 10;
     public ?string $search = '';
     public array $selected = [];
@@ -18,26 +16,22 @@ new class extends Component
         'direction' => 'desc',
     ];
     public $selectedannee;
-
     public function mount()
     {
         $this->selectedannee = session('selected_annee_id') ?? AnneeScolaire::where('est_en_cours', true)->value('id');
     }
-
     #[On('anneeChanged')]
     public function onAnneeChanged($id)
     {
         $this->selectedannee = $id;
         $this->selectpromo = null;
     }
-
     #[On('refreshetudiants')]
     public function refreshEtudiants()
     {
         $this->resetPage();
         $this->selected = [];
     }
-
     public function with(): array
     {
         return [
@@ -89,6 +83,9 @@ new class extends Component
                     type="button"
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-red-500 hover:text-red-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Supprimer
+                </button>
+                <button>
+                    Modifier
                 </button>
             </div>
         @endinteract

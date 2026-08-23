@@ -12,7 +12,7 @@ class Niveau extends Model
 {
     use HasAnneeScolaire, SoftDeletes;
 
-    protected $fillable = ['nom', 'nombre_annees', 'programme_id'];
+    protected $fillable = ['nom', 'nombre_annees', 'programme_id', 'nombre_periodes'];
 
     public function programme()
     {

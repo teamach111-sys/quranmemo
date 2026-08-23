@@ -1,8 +1,9 @@
 <?php
-declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+
 return new class extends Migration
 {
     /**
@@ -10,22 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('niveaux', function(Blueprint $table) {
+        Schema::create('periodes', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('description')->nullable();
-            $table->integer('nombre_periodes');
-            $table->foreignId('programme_id')->constrained('programmes')->cascadeOnDelete();
-            $table->integer('nombre_annees');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('niveaux');
+        Schema::dropIfExists('periodes');
     }
 };
