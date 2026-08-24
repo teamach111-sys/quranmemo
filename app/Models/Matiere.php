@@ -14,6 +14,7 @@ class Matiere extends Model
 
     protected $fillable = [
         'nom',
+        'periode_id',
         'niveau_id',
         'description',
         'annee_etude',
@@ -37,5 +38,9 @@ class Matiere extends Model
     public function etudiant()
     {
         return $this->belongsTo(Etudiant::class);
+    }
+    public function periode()
+    {
+        return $this->belongsTo(Periode::class);
     }
 }

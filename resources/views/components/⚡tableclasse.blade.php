@@ -1,14 +1,14 @@
 <?php
-
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\WithoutUrlPagination;
+use App\Models\AnneeScolaire;
 use App\Models\Classe;
 use App\Models\Promotion;
-
-new class extends Component {
-    use WithPagination, WithoutUrlPagination;
-
+use Livewire\Attributes\On;
+use Livewire\Component;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
+new class extends Component
+{
+    use WithoutUrlPagination, WithPagination;
     public Promotion $promotion;
     public ?string $search = '';
     public int $quantity = 10;
@@ -24,55 +24,69 @@ new class extends Component {
     public function boot()
     {
         if (empty($this->activeAnneeId)) {
-            $this->activeAnneeId = session('active_annee_id', function () {
-                return \App\Models\AnneeScolaire::where('est_en_cours', true)->first()?->id;
+            $this->activeAnneeId = session('active_annee_id', function() {
+                return AnneeScolaire::where('est_en_cours', true)->first()?->id;
             });
         }
     }
-
-    #[\Livewire\Attributes\On('refreshClasse')]
+    #[On('refreshClasse')]
     public function refreshClasse()
     {
         $this->resetPage();
         $this->selected = [];
     }
-
     public function with(): array
     {
         return [
             'promotion' => $this->promotion,
-            'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'matiere_nom', 'label' => 'Matière'], ['index' => 'salle', 'label' => 'Salle'], ['index' => 'professeur_nom', 'label' => 'Professeur'], ['index' => 'jour', 'label' => 'Jour'], ['index' => 'groupe', 'label' => 'Groupe'], ['index' => 'heure_debut', 'label' => 'Début'], ['index' => 'heure_fin', 'label' => 'Fin'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
+            'headers' => [
+                ['index' => 'id', 'label' => '#'],
+                ['index' => 'matiere_nom', 'label' => 'Matière'],
+                ['index' => 'salle', 'label' => 'Salle'],
+                ['index' => 'professeur_nom', 'label' => 'Professeur'],
+                ['index' => 'jour', 'label' => 'Jour'],
+                ['index' => 'groupe_nom', 'label' => 'Groupe'],  // Changed from groupe_id
+                ['index' => 'heure_debut', 'label' => 'Début'],
+                ['index' => 'heure_fin', 'label' => 'Fin'],
+                ['index' => 'action', 'label' => 'Action', 'sortable' => false],
+            ],
             'rows' => Classe::query()
                 ->join('matieres', 'classes.matiere_id', '=', 'matieres.id')
                 ->join('users', 'classes.professeur_id', '=', 'users.id')
                 ->join('promotions', 'classes.promotion_id', '=', 'promotions.id')
+                ->leftJoin('groupes', 'classes.groupe_id', '=', 'groupes.id')  // Add this join
                 ->where('classes.promotion_id', $this->promotion->id)
-                ->select('classes.*', 'matieres.nom as matiere_nom', 'users.name as professeur_nom', 'promotions.annee_scolaire_id as annee_scolaire_id')
+                ->select(
+                    'classes.*',
+                    'matieres.nom as matiere_nom',
+                    'users.name as professeur_nom',
+                    'promotions.annee_scolaire_id as annee_scolaire_id',
+                    'groupes.nom as groupe_nom'  // Add this select
+                )
                 ->orderByRaw("CASE LOWER(jour) WHEN 'lundi' THEN 1 WHEN 'mardi' THEN 2 WHEN 'mercredi' THEN 3 WHEN 'jeudi' THEN 4 WHEN 'vendredi' THEN 5 WHEN 'samedi' THEN 6 WHEN 'dimanche' THEN 7 ELSE 8 END")
                 ->orderBy('heure_debut', 'ASC')
-                ->when($this->activeAnneeId, fn($query) => $query->where('promotions.annee_scolaire_id', $this->activeAnneeId))
-                ->when($this->selectedDay || $this->selectedGroupe || $this->selectedSalle, function ($query) {
+                ->when($this->activeAnneeId, fn ($query) => $query->where('promotions.annee_scolaire_id', $this->activeAnneeId))
+                ->when($this->selectedDay || $this->selectedGroupe || $this->selectedSalle, function($query) {
                     if ($this->selectedDay) {
-                        $query->where('jour', $this->selectedDay);
+                        $query->where('classes.jour', $this->selectedDay);
                     }
                     if ($this->selectedGroupe) {
-                        $query->where('groupe', $this->selectedGroupe);
+                        $query->where('classes.groupe_id', $this->selectedGroupe);
                     }
                     if ($this->selectedSalle) {
-                        $query->where('salle', $this->selectedSalle);
+                        $query->where('classes.salle', $this->selectedSalle);
                     }
                 })
-
                 ->when(
                     $this->search,
-                    fn($query) => $query->where(function ($q) {
+                    fn ($query) => $query->where(function($q) {
                         $q->where('matieres.nom', 'like', "%{$this->search}%")
                             ->orWhere('users.name', 'like', "%{$this->search}%")
                             ->orWhere('jour', 'like', "%{$this->search}%")
                             ->orWhere('heure_debut', 'like', "%{$this->search}%")
                             ->orWhere('heure_fin', 'like', "%{$this->search}%")
                             ->orWhere('salle', 'like', "%{$this->search}%")
-                            ->orWhere('groupe', 'like', "%{$this->search}%");
+                            ->orWhere('groupes.nom', 'like', "%{$this->search}%");  // Updated search
                     }),
                 )
                 ->orderBy(...array_values($this->sort))
@@ -82,11 +96,8 @@ new class extends Component {
     }
 };
 ?>
-
 <div>
-
     <div class="mb-5">
-
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-bold text-[20px]">
@@ -99,7 +110,6 @@ new class extends Component {
             </div>
         </div>
     </div>
-
     <x-table selectable wire:model.live="selected" :$headers :$rows :$sort paginate>
         <x-slot:header>
             <div class="flex items-end justify-between mb-4 gap-4">
@@ -115,25 +125,18 @@ new class extends Component {
                         <option value="vendredi">Vendredi</option>
                         <option value="samedi">Samedi</option>
                         <option value="dimanche">Dimanche</option>
-
                     </x-select.native>
                     <x-select.native wire:model.live="selectedGroupe" id="selectedGroupe">
                         <option value="">Sélectionner un groupe</option>
                         @foreach (\App\Models\Groupe::all() as $groupe)
-                            <option value="{{ $groupe->nom }}">{{ $groupe->nom }}</option>
+                            <option value="{{ $groupe->id }}">{{ $groupe->nom }}</option>
                         @endforeach
-
-
-
                     </x-select.native>
-
                     <x-select.native wire:model.live="selectedSalle" id="selectedSalle">
                         <option value="">Sélectionner une salle</option>
                         @foreach (\App\Models\Salle::all() as $salle)
                             <option value="{{ $salle->nom }}">{{ $salle->nom }}</option>
                         @endforeach
-
-
                     </x-select.native>
                 </div>
                 <div class="flex gap-2">
@@ -150,28 +153,20 @@ new class extends Component {
                             <x-elemplus-printer class="h-5 w-5" />Imprimer
                         </x-button>
                     @endif
-
                     <x-button x-on:click="$tsui.open.modal('ajouteretudiantaclasse')">
                         Ajouter etudiants
                     </x-button>
-
                     <x-button x-on:click="$tsui.open.modal('createclasse')">
                         Nouvelle Classe
                     </x-button>
-
                 </div>
             </div>
         </x-slot:header>
-
-
-
         @interact('column_jour', $row)
             {{ ucfirst($row->jour) }}
         @endinteract
-
         @interact('column_action', $row)
             <div class="flex justify-left gap-4 items-center">
-
                 <button type="button"
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-blue-500 hover:text-blue-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Modifier
@@ -184,9 +179,10 @@ new class extends Component {
                 </button>
             </div>
         @endinteract
-
+        @interact('column_groupe_nom', $row)
+        <x-badge color="blue">{{ $row->groupe_nom ?? 'N/A' }}</x-badge>
+        @endinteract
     </x-table>
-
     <x-modal id="deletedata" center>
         <livewire:suppmodal />
     </x-modal>

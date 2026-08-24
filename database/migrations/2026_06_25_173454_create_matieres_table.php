@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('matieres', function(Blueprint $table) {
             $table->id();
             $table->string('nom');
+            $table->foreignId('periode_id')->constrained('periodes')->cascadeOnDelete();
             $table->foreignId('niveau_id')->constrained()->cascadeOnDelete();
             $table->string('description')->nullable();
             $table->string('annee_etude');

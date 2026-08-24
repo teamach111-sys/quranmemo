@@ -11,6 +11,8 @@ class Note extends Model
     use HasAnneeScolaire, SoftDeletes;
     protected $fillable = [
         'promotion_id',
+        'periode_id',
+        'matiere_id',
         'etudiant_id',
         'note',
         'observation'

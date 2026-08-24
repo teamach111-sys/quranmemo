@@ -17,7 +17,7 @@ class Classe extends Model
         'periode_id',
         'matiere_id',
         'professeur_id',
-        'groupe',
+        'groupe_id',
         'salle',
         'jour',
         'heure_debut',
@@ -57,5 +57,13 @@ class Classe extends Model
     public function promotion()
     {
         return $this->belongsTo(Promotion::class);
+    }
+    public function groupe()
+    {
+        return $this->belongsTo(groupe::class);
+    }
+    public function periode()
+    {
+        return $this->belongsTo(periode::class);
     }
 }

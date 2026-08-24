@@ -10,4 +10,9 @@ class Periode extends Model
     use HasAnneeScolaire;
 
     protected $fillable = ['nom'];
+
+
+    public function matiere(){
+        return $this->hasMany(matiere::class);
+    }
 }

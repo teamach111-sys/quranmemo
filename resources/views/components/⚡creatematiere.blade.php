@@ -9,6 +9,7 @@ new class extends Component {
     public $annee_etude;
     public $nombre_annees;
     public $niveau;
+    public $periode;
     public function mount(\App\Models\Niveau $niveau)
     {
         $this->niveauid = $niveau->id;
@@ -26,6 +27,7 @@ new class extends Component {
     ]);
         \App\Models\Matiere::create([
             'nom' => $this->nom,
+            'periode_id' => $this->periode,
             'niveau_id' => $this->niveauid,
             'description' => $this->description,
             'annee_etude' => $this->annee_etude,
@@ -34,8 +36,11 @@ new class extends Component {
     }
     public function render()
     {
+
+        $periodes = \App\Models\Periode::all();
         return view('⚡creatematiere', [
             'niveaux' => \App\Models\Niveau::all(),
+            'periodes' => $periodes,
         ]);
     }
 };
@@ -62,6 +67,15 @@ new class extends Component {
                         <option 
                             value="{{ $i }}">{{ $i }}{{ $i == 1 ? 'ère' : 'ème' }} année</option>
                     @endfor
+                </x-select.native>
+            </div>
+                 <div>
+                <x-select.native label="Période" wire:model="periode" id="periode">
+                    <option value="">Choisir une période</option>
+                    @foreach ($periodes as $periode)
+                        <option 
+                            value="{{ $periode->id }}">{{ $periode->nom }}</option>
+                    @endforeach
                 </x-select.native>
             </div>
 

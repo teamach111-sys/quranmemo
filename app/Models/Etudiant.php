@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\HasAnneeScolaire;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Etudiant extends Model
 {
-    use HasAnneeScolaire, SoftDeletes;
+    use HasAnneeScolaire, SoftDeletes, HasFactory;
 
     protected $fillable = [
         'nom',
@@ -41,5 +42,8 @@ class Etudiant extends Model
     }
     public function anneeScolaire(){
         return $this->belongsTo(AnneeScolaire::class);
+    }
+    public function matiere(){
+        return $this->hasManyThrough(matiere::class, 'promotion_id', 'niveau_id' );
     }
 }

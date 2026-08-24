@@ -12,6 +12,7 @@ return new class extends Migration
     {
         Schema::create('notes', function(Blueprint $table) {
             $table->id();
+            $table->foreignId('matiere_id')->constrained('matieres');
             $table->foreignId('promotion_id')
                 ->constrained('promotions')
                 ->onDelete('cascade');

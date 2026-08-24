@@ -51,7 +51,7 @@ new class extends Component {
             'promotion_id' => $this->promotion_id,
             'matiere_id' => $this->matiere_id,
             'professeur_id' => $this->professeur_id,
-            'groupe' => $this->groupe,
+            'groupe_id' => $this->groupe,
             'salle' => $this->salle,
             'jour' => $this->jour,
             'heure_debut' => $this->heure_debut,
@@ -81,7 +81,7 @@ new class extends Component {
             <x-select.native wire:model="groupe" label="Groupe" id="groupe">
                 <option value="">Choisir le Groupe</option>
                 @foreach(\App\Models\Groupe::all() as $groupe)
-                <option value="{{ $groupe->nom }}">{{ $groupe->nom }}</option>
+                <option value="{{ $groupe->id }}">{{ $groupe->nom }}</option>
                 @endforeach
             </x-select.native>
 
