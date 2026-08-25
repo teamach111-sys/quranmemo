@@ -5,8 +5,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
-new class extends Component
-{
+new class extends Component {
     use WithoutUrlPagination, WithPagination;
     public int $quantity = 10;
     public ?string $search = '';
@@ -16,6 +15,8 @@ new class extends Component
         'direction' => 'desc',
     ];
     public $selectedannee;
+    public $selectedpromotion = null;
+    public $selectedgroupe = null;
     public function mount()
     {
         $this->selectedannee = session('selected_annee_id') ?? AnneeScolaire::where('est_en_cours', true)->value('id');
@@ -24,7 +25,9 @@ new class extends Component
     public function onAnneeChanged($id)
     {
         $this->selectedannee = $id;
-        $this->selectpromo = null;
+        $this->selectedpromotion = null;
+        $this->selectedgroupe = null;
+
     }
     #[On('refreshetudiants')]
     public function refreshEtudiants()
@@ -34,22 +37,24 @@ new class extends Component
     }
     public function with(): array
     {
+      
+        $queryy = Etudiant::query()
+            ->select('*')
+            ->selectRaw('TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) as age')
+            ->forCurrentAnnee()
+            ->when(
+                $this->search,
+                fn($query) => $query->where(function ($q) {
+                    $q->where('nom', 'like', "%{$this->search}%")
+                        ->orWhere('prenom', 'like', "%{$this->search}%")
+                        ->orWhere('telephone', 'like', "%{$this->search}%");
+                }),
+            )
+            ->when($this->selectedpromotion, fn($q) => $q->where('promotion_id', $this->selectedpromotion))
+            ->when($this->selectedgroupe, fn($q) => $q->where('groupe_id', $this->selectedgroupe));
         return [
             'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'nom', 'label' => 'Nom'], ['index' => 'prenom', 'label' => 'Prénom'], ['index' => 'sexe', 'label' => 'Sexe'], ['index' => 'date_naissance', 'label' => 'Date de naissance'], ['index' => 'age', 'label' => 'Age'], ['index' => 'telephone', 'label' => 'Téléphone'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
-            'rows' => Etudiant::query()
-                ->select('*')
-                ->selectRaw('TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) as age')
-                ->forCurrentAnnee()
-                ->when(
-                    $this->search,
-                    fn ($query) => $query->where(function($q) {
-                        $q->where('nom', 'like', "%{$this->search}%")
-                            ->orWhere('prenom', 'like', "%{$this->search}%")
-                            ->orWhere('telephone', 'like', "%{$this->search}%");
-                    }))
-                ->orderBy(...array_values($this->sort))
-                ->paginate($this->quantity)
-                ->withQueryString(),
+            'rows' => $queryy->orderBy(...array_values($this->sort))->paginate($this->quantity)->withQueryString(),
         ];
     }
 };
@@ -58,9 +63,21 @@ new class extends Component
     <x-table selectable wire:model.live="selected" :$headers :$rows :$sort paginate>
         <x-slot:header>
             <div class="flex items-end justify-between mb-4 gap-4">
-                <div class="w-1/4">
+                <div class=" flex gap-4">
                     <x-input icon="magnifying-glass" wire:model.live.debounce.500ms="search" placeholder="Rechercher..."
                         type="search" />
+                    <x-select.native wire:model.live="selectedpromotion">
+                        <option value=""  selected>Selectionner une promotion</option>
+                        @foreach (\App\Models\Promotion::with('programme')->forCurrentAnnee()->get() as $promo)
+                            <option value="{{ $promo->id }}">{{ $promo->programme->nom }}</option>
+                        @endforeach
+                    </x-select.native>
+                    <x-select.native wire:model.live="selectedgroupe">
+                        <option value=""  selected>Selectionner un groupe</option>
+                        @foreach (\App\Models\Groupe::all() as $groupe)
+                            <option value="{{ $groupe->id }}">{{ $groupe->nom }}</option>
+                        @endforeach
+                    </x-select.native>
                 </div>
                 <div class="flex gap-2">
                     @if (count($selected) > 0)

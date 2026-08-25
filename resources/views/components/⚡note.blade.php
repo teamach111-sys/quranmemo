@@ -123,6 +123,7 @@ new class extends Component
             $this->notes[$note->etudiant_id] = $note->note;
             $this->observations[$note->etudiant_id] = $note->observation;
         }
+        logger()->info($this->notes);
     }
 
     public function with(): array
