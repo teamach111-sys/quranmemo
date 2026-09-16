@@ -13,17 +13,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sourates', function(Blueprint $table) {
+        Schema::create('hizbs', function(Blueprint $table) {
             $table->id();
             $table->unsignedTinyInteger('number')->unique();
-            $table->string('name_arabic');
-            $table->string('name_complex');
-            $table->string('name_simple');
-            $table->string('name_french');
-            $table->unsignedSmallInteger('verses_count');
-            $table->string('revelation_place');
-            $table->unsignedSmallInteger('revelation_order');
-            $table->boolean('bismillah_pre')->default(false);
+            $table->foreignId('juz_id')->constrained('juzs')->onDelete('cascade');
+            $table->unsignedInteger('first_verse_id')->nullable();
+            $table->unsignedInteger('last_verse_id')->nullable();
+            $table->string('first_verse_key')->nullable();
+            $table->string('last_verse_key')->nullable();
+            $table->unsignedSmallInteger('verses_count')->default(0);
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sourates');
+        Schema::dropIfExists('hizbs');
     }
 };

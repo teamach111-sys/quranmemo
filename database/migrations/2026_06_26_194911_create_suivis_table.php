@@ -21,9 +21,14 @@ return new class extends Migration
             $table->boolean('isArchived')->default(false);
             $table->text('observation')->nullable();
             $table->foreignId('sourate_id')->constrained('sourates');
+            $table->unsignedSmallInteger('debut_aya')->nullable();
+            $table->unsignedSmallInteger('fin_aya')->nullable();
+            $table->foreignId('juz_id')->nullable()->constrained('juzs')->nullOnDelete();
+            $table->foreignId('hizb_id')->nullable()->constrained('hizbs')->nullOnDelete();
             $table->foreignId('annee_scolaire_id')->constrained('annee_scolaires')->onDelete('cascade');
             $table->string('etat_de_recitation');
             $table->index(['etudiant_id', 'date']);
+            $table->index(['sourate_id', 'debut_aya', 'fin_aya']);
             $table->index(['isArchived']);
             $table->timestamps();
         });
