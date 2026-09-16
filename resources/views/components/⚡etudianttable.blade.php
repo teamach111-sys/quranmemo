@@ -27,7 +27,6 @@ new class extends Component {
         $this->selectedannee = $id;
         $this->selectedpromotion = null;
         $this->selectedgroupe = null;
-
     }
     #[On('refreshetudiants')]
     public function refreshEtudiants()
@@ -37,7 +36,6 @@ new class extends Component {
     }
     public function with(): array
     {
-      
         $queryy = Etudiant::query()
             ->select('*')
             ->selectRaw('TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) as age')
@@ -67,13 +65,13 @@ new class extends Component {
                     <x-input icon="magnifying-glass" wire:model.live.debounce.500ms="search" placeholder="Rechercher..."
                         type="search" />
                     <x-select.native wire:model.live="selectedpromotion">
-                        <option value=""  selected>Selectionner une promotion</option>
+                        <option value="" selected>Selectionner une promotion</option>
                         @foreach (\App\Models\Promotion::with('programme')->forCurrentAnnee()->get() as $promo)
                             <option value="{{ $promo->id }}">{{ $promo->programme->nom }}</option>
                         @endforeach
                     </x-select.native>
                     <x-select.native wire:model.live="selectedgroupe">
-                        <option value=""  selected>Selectionner un groupe</option>
+                        <option value="" selected>Selectionner un groupe</option>
                         @foreach (\App\Models\Groupe::all() as $groupe)
                             <option value="{{ $groupe->id }}">{{ $groupe->nom }}</option>
                         @endforeach
