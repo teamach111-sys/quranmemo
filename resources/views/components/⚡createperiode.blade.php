@@ -21,6 +21,7 @@ new class extends Component
             'nom' => $this->nom,
         ]);
         $this->reset();
+        $this->dispatch('actualiser-periodes');
         $this->toast()->success('Création réussie', 'La période a été créée avec succès.')->send();
     }
 };

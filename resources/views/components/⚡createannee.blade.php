@@ -15,7 +15,7 @@ new class extends Component {
             'libelle' => 'required|string|max:50',
             'date_debut' => 'required|date|before:date_fin',
             'date_fin' => 'required|date|after:date_debut',
-            'est_en_cours' => 'required|boolean',
+            'est_en_cours' => 'nullable|boolean',
         ]);
 
         if ($this->est_en_cours) {

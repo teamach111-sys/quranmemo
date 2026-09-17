@@ -23,6 +23,7 @@ new class extends Component
             'annee_scolaire_id' => $this->selectedannee,
         ]);
         $this->reset();
+        $this->dispatch('actualiser-groupes');
         $this->toast()->success('Création réussie', 'Le groupe a été créée avec succès.')->send();
     }
 };

@@ -13,6 +13,14 @@ class Suivi extends Model
 {
     use HasAnneeScolaire, SoftDeletes;
 
+    public const ETATS = [
+        'en_cours' => 'En cours',
+        'bien' => 'Bien',
+        'tres_bien' => 'Très bien',
+        'excellent' => 'Excellent',
+        'a_revoir' => 'À revoir',
+    ];
+
     protected $fillable = [
         'date',
         'classe_id',

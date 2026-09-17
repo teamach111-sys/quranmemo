@@ -17,6 +17,8 @@ new class extends Component {};
     <div class="mt-5 border dark:border-darkborder rounded-md p-4 w-fit">
         <livewire:createannee/>
         <hr class="border-t dark:border-darkborder my-6" />
+        <livewire:modifierannee/>
+        <hr class="border-t dark:border-darkborder my-6" />
         <livewire:supprimerannee/>
     </div>
     <div class="mt-5 border border-darkborder rounded-md p-4 w-fit">
@@ -25,9 +27,18 @@ new class extends Component {};
      <div class="mt-5 border border-darkborder rounded-md p-4 w-fit">
         <livewire:createsalle />
         <hr class="border-t dark:border-darkborder my-6" />
+        <livewire:modifiersalle />
+        <hr class="border-t dark:border-darkborder my-6" />
+        <livewire:supprimersalle />
+    </div>
+    <div class="mt-5 border border-darkborder rounded-md p-4 w-fit">
         <livewire:creategroupe />
+        <hr class="border-t dark:border-darkborder my-6" />
+        <livewire:supprimergroupe />
     </div>
        <div class="mt-5 border dark:border-darkborder rounded-md p-4 w-fit">
                 <livewire:createperiode />
+                <hr class="border-t dark:border-darkborder my-6" />
+                <livewire:supprimerperiode />
     </div>
 </div>

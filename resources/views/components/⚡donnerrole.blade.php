@@ -23,7 +23,21 @@ new class extends Component {
             $this->toast()->success('Attribution réussie', 'Le rôle a été attribué avec succès.')->send();
         }
     }
-   
+
+    public function retirerRole()
+    {
+        if (! $this->utilisateurSelecte) {
+            $this->toast()->error('Erreur', 'Veuillez sélectionner un utilisateur')->send();
+
+            return;
+        }
+
+        $utilisateur = User::find($this->utilisateurSelecte);
+        $utilisateur->role = null;
+        $utilisateur->save();
+        $this->utilisateurliste = User::all();
+        $this->toast()->success('Rôle retiré', 'Le rôle a été retiré avec succès.')->send();
+    }
 };
 ?>
 
@@ -36,7 +50,7 @@ new class extends Component {
                 <option value="">Sélectionner un utilisateur</option>
                 @foreach ($utilisateurliste as $utilisateur)
                     <option value="{{ $utilisateur->id }}">
-                        {{ $utilisateur->name }} - ({{ $utilisateur->role }})
+                        {{ $utilisateur->name }} - ({{ $utilisateur->role ?: 'aucun rôle' }})
                     </option>
                 @endforeach
             </x-select.native>
@@ -53,9 +67,16 @@ new class extends Component {
             </x-select.native>
         </div>
     </div>
-    <x-button wire:click="assignerRole"
-        class="mt-4 dark:!bg-darkaddbutton dark:text-black dark:focus:!ring-darkaddbuttonring
+    <div class="mt-4 flex items-center gap-2">
+        <x-button wire:click="assignerRole"
+            class="dark:!bg-darkaddbutton dark:text-black dark:focus:!ring-darkaddbuttonring
   flex-1 rounded-md bg-darkcontentbg hover:!bg-darkaddbuttonhover text-white px-4 py-2 cursor-pointer "><x-uiw-check
-            class="w-5 h-5" />Assigner le Rôle</x-button>
+                class="w-5 h-5" />Assigner le Rôle</x-button>
+
+        <x-button wire:click="retirerRole"
+            class="dark:!bg-darkdeletebutton dark:text-white dark:focus:!ring-darkdeletebutton
+  flex-1 rounded-md bg-darkdeletebutton hover:!bg-darkdeletebuttonhover text-white px-4 py-2 cursor-pointer "><x-uiw-delete
+                class="w-5 h-5" />Retirer le Rôle</x-button>
+    </div>
 
 </div>

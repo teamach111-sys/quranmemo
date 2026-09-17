@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('suivis', function(Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->foreignId('classe_id')->constrained('classes')->onDelete('cascade');
+            $table->foreignId('classe_id')->nullable()->constrained('classes')->onDelete('cascade');
             $table->foreignId('etudiant_id')->constrained('etudiants')->onDelete('cascade');
             $table->boolean('isArchived')->default(false);
             $table->text('observation')->nullable();
@@ -31,6 +31,7 @@ return new class extends Migration
             $table->index(['sourate_id', 'debut_aya', 'fin_aya']);
             $table->index(['isArchived']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

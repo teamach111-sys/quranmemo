@@ -19,6 +19,7 @@ new class extends Component {
             'capacite' => $this->capacite,
         ]);
         $this->reset();
+        $this->dispatch('actualiser-salles');
         $this->toast()->success('Création réussie', 'La salle a été créée avec succès.')->send();
     }
 };
