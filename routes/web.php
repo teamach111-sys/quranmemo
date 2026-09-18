@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\EtudiantExportController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'verified', 'can:view-etudiants'])->group(function() 
     Route::livewire('/filieregerer/{programme}', '⚡filieregerer')->name('filiere');
     Route::livewire('/matieregerer/{niveau}', '⚡matieregerer')->name('matiere');
     Route::livewire('/classe/{promotion}', '⚡tableclasse')->name('classes');
+    Route::get('etudiants/export', EtudiantExportController::class)->name('etudiants.export');
 });
 Route::middleware(['auth', 'verified', 'can:view-programme'])->group(function() {
     Route::livewire('filieres', '⚡programme')->name('programme');
