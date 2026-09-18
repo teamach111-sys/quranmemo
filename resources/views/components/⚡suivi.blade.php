@@ -87,7 +87,14 @@ new class extends Component {
             return;
         }
 
-        $records = Suivi::whereIn('etudiant_id', $this->studentIds())
+        // Only load suivi data for current page's students
+        $currentPageStudents = Etudiant::where('promotion_id', $this->selectpromo)
+            ->when($this->selectedgroupe, fn($qq) => $qq->where('groupe_id', $this->selectedgroupe))
+            ->when($this->selectpromo, fn($q) => $q->orderBy(...array_values($this->sort)))
+            ->paginate($this->quantity, ['*'], 'page', request()->get('page', 1))
+            ->pluck('id');
+
+        $records = Suivi::whereIn('etudiant_id', $currentPageStudents)
             ->where('date', $this->selectdate)
             ->where('annee_scolaire_id', $this->selectedannee)
             ->get();
@@ -165,12 +172,17 @@ new class extends Component {
             ? Classe::where('promotion_id', $this->selectpromo)->with('groupe')->get()->unique('groupe_id')
             : collect();
 
+        // Only load reference data when a promotion is selected
+        $sourates = $this->selectpromo ? Sourate::orderBy('number')->get() : collect();
+        $juzs = $this->selectpromo ? Juz::orderBy('number')->get() : collect();
+        $hizbs = $this->selectpromo ? Hizb::orderBy('number')->get() : collect();
+
         return view('⚡suivi', [
             'promotions' => $promotions,
             'groupes' => $groupes,
-            'sourates' => Sourate::orderBy('number')->get(),
-            'juzs' => Juz::orderBy('number')->get(),
-            'hizbs' => Hizb::orderBy('number')->get(),
+            'sourates' => $sourates,
+            'juzs' => $juzs,
+            'hizbs' => $hizbs,
             'etats' => Suivi::ETATS,
         ]);
     }
