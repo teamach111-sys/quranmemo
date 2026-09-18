@@ -15,6 +15,9 @@ class EtudiantPdfController extends Controller
 {
     public function __invoke(Request $request)
     {
+        // Increase memory limit for PDF generation
+        ini_set('memory_limit', '512M');
+        
         $promotionId = $request->filled('promotion') ? (int) $request->input('promotion') : null;
         $groupeId = $request->filled('groupe') ? (int) $request->input('groupe') : null;
         $search = $request->filled('search') ? $request->input('search') : null;

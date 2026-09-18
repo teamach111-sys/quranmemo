@@ -9,10 +9,17 @@ use App\Models\Sourate;
 use App\Models\Suivi;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\WithoutUrlPagination;
 use TallStackUi\Traits\Interactions;
 
 new class extends Component {
-    use Interactions;
+    use Interactions, WithPagination, WithoutUrlPagination;
+    public int $quantity = 10;
+    public array $sort = [
+        'column' => 'id',
+        'direction' => 'desc',
+    ];
 
     public $selectpromo;
     public $selectedgroupe;
@@ -46,16 +53,19 @@ new class extends Component {
     {
         $this->selectedgroupe = null;
         $this->loadSuivis();
+        $this->resetPage();
     }
 
     public function updatedSelectedgroupe()
     {
         $this->loadSuivis();
+        $this->resetPage();
     }
 
     public function updatedSelectdate()
     {
         $this->loadSuivis();
+        $this->resetPage();
     }
 
     public function resetFields()
@@ -174,15 +184,15 @@ new class extends Component {
             'headers' => [
                 ['index' => 'id', 'label' => '#'],
                 ['index' => 'nom', 'label' => 'Etudiant'],
-                ['index' => 'sourate', 'label' => 'Sourate'],
-                ['index' => 'debut', 'label' => 'Début'],
-                ['index' => 'fin', 'label' => 'Fin'],
-                ['index' => 'juz', 'label' => 'Juz'],
-                ['index' => 'hizb', 'label' => 'Hizb'],
-                ['index' => 'etat_de_recitation', 'label' => 'Etat de récitation'],
-                ['index' => 'observation', 'label' => 'Observation'],
+                ['index' => 'sourate', 'label' => 'Sourate', 'sortable' => false],
+                ['index' => 'debut', 'label' => 'Début', 'sortable' => false],
+                ['index' => 'fin', 'label' => 'Fin', 'sortable' => false],
+                ['index' => 'juz', 'label' => 'Juz', 'sortable' => false],
+                ['index' => 'hizb', 'label' => 'Hizb', 'sortable' => false],
+                ['index' => 'etat_de_recitation', 'label' => 'Etat de récitation', 'sortable' => false],
+                ['index' => 'observation', 'label' => 'Observation', 'sortable' => false],
             ],
-            'rows' => $query->get(),
+            'rows' => $query->when($this->selectpromo, fn($q) => $q->orderBy(...array_values($this->sort)))->paginate($this->quantity)->withQueryString(),
         ];
     }
 };
@@ -215,7 +225,7 @@ new class extends Component {
                 @endforeach
             </x-select.native>
         </div>
-        <x-table :$headers :$rows>
+        <x-table :$headers :$rows :$sort paginate>
             @interact('column_nom', $row)
                 <span class="whitespace-nowrap">{{ $row->prenom }} {{ $row->nom }}</span>
             @endinteract
