@@ -115,3 +115,31 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* Date picker customization */
+.dark [data-floating][data-component="date"] .floating-wrapper {
+    background-color: var(--color-darkcontentbg);
+    border-color: var(--color-darkborder);
+}
+
+.dark [data-floating][data-component="date"] .box-picker-wrapper-first {
+    background-color: var(--color-darkcontentbg);
+}
+
+.dark [data-floating][data-component="date"] .box-picker-label {
+    background-color: var(--color-darkcontentbg);
+    color: var(--color-darkcontenttext);
+}
+
+.dark [data-floating][data-component="date"] .button-day {
+    color: var(--color-darkcontenttext);
+}
+
+.dark [data-floating][data-component="date"] .button-selected {
+    background-color: var(--color-darkaddbutton);
+    color: white;
+}
+
+.dark [data-floating][data-component="date"] .button-navigate:hover {
+    background-color: var(--color-darkinputcolor);
+}

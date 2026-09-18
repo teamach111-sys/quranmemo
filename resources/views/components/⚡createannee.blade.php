@@ -55,11 +55,11 @@ new class extends Component {
             </div>
 
             <div>
-                <x-input label="Date début" type="date" wire:model="date_debut" id="date_debut" />
+                <x-date format="YYYY-MM-DD" label="Date début" wire:model="date_debut" id="date_debut" />
             </div>
 
             <div>
-                <x-input label="Date fin" type="date" wire:model="date_fin" id="date_fin" />
+                <x-date format="YYYY-MM-DD" label="Date fin" wire:model="date_fin" id="date_fin" />
             </div>
 
             <div class="flex items-center gap-2 mt-6">

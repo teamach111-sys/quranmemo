@@ -75,6 +75,21 @@ class AppServiceProvider extends ServiceProvider
             ->block('item.select', 'text-primary-500 dark:text-white border-primary-500 dark:border-white group inline-flex cursor-pointer items-center border-b-2 font-medium')
             ->block('item.unselect', 'dark:text-gray-400 cursor-pointer border-b-2 border-transparent font-medium text-gray-500 flex hover:text-gray-700 dark:hover:text-gray-200');
 
+        TallStackUi::customize()
+            ->form('date')
+            ->block('floating.default', 'dark:bg-darkcontentbg border-dark-200 dark:border-darkborder absolute !z-[900] rounded-lg border bg-white')
+            ->block('box.picker.button', 'text-gray-900 focus:ring-darkborder flex items-center justify-between rounded-lg px-2 py-1 mb-6 text-sm font-semibold focus:outline-hidden focus:ring-2 dark:text-white')
+            ->block('box.picker.wrapper.first', 'dark:bg-darkcontentbg absolute left-0 top-0 flex h-full w-full select-none rounded-lg bg-white p-3')
+            ->block('box.picker.label', 'text-gray-900 dark:bg-darkcontentbg dark:text-darkcontenttext hover:bg-dark-100 dark:hover:bg-darkinputcolor focus:ring-darkborder flex cursor-pointer items-center justify-between rounded-lg bg-white px-2 py-1 text-sm font-semibold focus:outline-hidden focus:ring-0 dark:text-white')
+            ->block('box.picker.range', 'text-gray-400 dark:text-darksmalltext font-medium hover:bg-dark-100 dark:hover:bg-darkinputcolor text-gray-600 dark:text-darksmalltext disabled:text-gray-400 dark:disabled:text-dark-500 flex h-6 w-1/4 cursor-pointer select-none items-center justify-center rounded-md p-1 text-center font-normal disabled:cursor-not-allowed')
+            ->block('button.day', 'focus:shadow-outline disabled:text-gray-400 dark:disabled:text-dark-500 dark:active:bg-darkaddbutton ring-darkaddbutton active:bg-darkaddbutton dark:text-darkcontenttext flex h-7 w-7 items-center justify-center rounded-full text-center text-sm leading-none outline-hidden transition-all duration-200 ease-in-out hover:shadow-sm active:text-white disabled:cursor-not-allowed cursor-pointer')
+            ->block('button.select', 'text-gray-600 dark:text-darkcontenttext hover:bg-darkinputcolor dark:hover:bg-darkinputcolor')
+            ->block('button.today', 'text-darkaddbutton dark:text-darkaddbutton !font-bold')
+            ->block('button.selected', 'bg-darkaddbutton !text-white hover:bg-darkaddbuttonhover')
+            ->block('button.helpers', 'text-gray-500 dark:text-darkcontenttext bg-darkinputcolor dark:bg-darkinputcolor hover:bg-darkborder dark:hover:bg-darkborder select-none whitespace-nowrap rounded-md px-2 py-1 text-sm font-medium')
+            ->block('button.navigate', 'focus:shadow-outline hover:bg-darkinputcolor dark:hover:bg-darkinputcolor inline-flex cursor-pointer rounded-full p-1 transition duration-100 ease-in-out focus:outline-hidden')
+            ->block('range', 'bg-darkinputcolor dark:bg-darkinputcolor');
+
         $this->configureDefaults();
 
         Gate::define('admin', function(User $user) {

@@ -155,7 +155,7 @@ new class extends Component {
                 </x-select.native>
             </div>
             <div>
-                <x-input type="date" label="Date de naissance" wire:model="date_naissance" />
+                <x-date format="YYYY-MM-DD" label="Date de naissance" wire:model="date_naissance" />
             </div>
             <div>
                 <x-input label="Téléphone" placeholder="Ex: 0678576807" wire:model="telephone" />
