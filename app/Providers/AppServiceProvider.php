@@ -68,6 +68,13 @@ class AppServiceProvider extends ServiceProvider
             ->button()
             ->block('wrapper.sizes.md', 'text-md px-5 py-3');
 
+        TallStackUi::customize()
+            ->tab()
+            ->block('base.wrapper', 'dark:bg-darkcontentbg dark:border-darkborder border w-full rounded-lg bg-white shadow-sm')
+            ->block('base.divider', 'h-px border-0 bg-gray-300 dark:bg-darkborder')
+            ->block('item.select', 'text-primary-500 dark:text-white border-primary-500 dark:border-white group inline-flex cursor-pointer items-center border-b-2 font-medium')
+            ->block('item.unselect', 'dark:text-gray-400 cursor-pointer border-b-2 border-transparent font-medium text-gray-500 flex hover:text-gray-700 dark:hover:text-gray-200');
+
         $this->configureDefaults();
 
         Gate::define('admin', function(User $user) {
