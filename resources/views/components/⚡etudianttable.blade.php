@@ -161,7 +161,10 @@ new class extends Component {
                     class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-red-500 hover:text-red-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Supprimer
                 </button>
-                <button>
+                <button
+                    x-on:click="$dispatch('editetudiant', { id: {{ $row->id }} }); $tsui.open.modal('editetudiant')"
+                    type="button"
+                    class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-blue-500 hover:text-blue-700 dark:text-darkcontenttext dark:hover:text-darkcontenttext focus:outline-hidden cursor-pointer">
                     Modifier
                 </button>
             </div>
@@ -183,6 +186,9 @@ new class extends Component {
     </x-table>
     <x-modal id="createetudiant" persistent center>
         <livewire:createetudiant />
+    </x-modal>
+    <x-modal id="editetudiant" persistent center>
+        <livewire:editetudiant />
     </x-modal>
     <x-modal id="deletedata" center class="dark:!bg-black">
         <livewire:suppmodal />
