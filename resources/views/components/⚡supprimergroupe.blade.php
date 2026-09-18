@@ -50,10 +50,8 @@ new class extends Component {
             </x-select.native>
         </div>
 
-        <x-button wire:click="supprimer"
-            class="dark:!bg-darkdeletebutton dark:text-white dark:focus:!ring-darkdeletebutton
-  flex-1 rounded-md bg-darkdeletebutton hover:!bg-darkdeletebuttonhover text-white px-4 py-2 cursor-pointer ">
-            <x-uiw-delete class="w-5 h-5" />Supprimer le groupe
-        </x-button>
+        <x-button wire:click="supprimer" title="Supprimer le groupe"
+            class="shrink-0 rounded-md bg-darkdeletebutton hover:bg-darkdeletebuttonhover text-white p-2 cursor-pointer transition-colors"><x-uiw-delete
+                class="w-5 h-5" /></x-button>
     </div>
 </div>

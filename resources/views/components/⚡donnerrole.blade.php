@@ -73,10 +73,9 @@ new class extends Component {
   flex-1 rounded-md bg-darkcontentbg hover:!bg-darkaddbuttonhover text-white px-4 py-2 cursor-pointer "><x-uiw-check
                 class="w-5 h-5" />Assigner le Rôle</x-button>
 
-        <x-button wire:click="retirerRole"
-            class="dark:!bg-darkdeletebutton dark:text-white dark:focus:!ring-darkdeletebutton
-  flex-1 rounded-md bg-darkdeletebutton hover:!bg-darkdeletebuttonhover text-white px-4 py-2 cursor-pointer "><x-uiw-delete
-                class="w-5 h-5" />Retirer le Rôle</x-button>
+        <x-button wire:click="retirerRole" title="Retirer le rôle"
+            class="shrink-0 rounded-md bg-darkdeletebutton hover:bg-darkdeletebuttonhover text-white p-2 cursor-pointer transition-colors"><x-uiw-delete
+                class="w-5 h-5" /></x-button>
     </div>
 
 </div>
