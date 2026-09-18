@@ -51,7 +51,7 @@ new class extends Component {
             ->when($this->selectedpromotion, fn($q) => $q->where('promotion_id', $this->selectedpromotion))
             ->when($this->selectedgroupe, fn($q) => $q->where('groupe_id', $this->selectedgroupe));
         return [
-            'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'nom', 'label' => 'Nom'], ['index' => 'prenom', 'label' => 'Prénom'], ['index' => 'sexe', 'label' => 'Sexe'], ['index' => 'date_naissance', 'label' => 'Date de naissance'], ['index' => 'age', 'label' => 'Age'], ['index' => 'telephone', 'label' => 'Téléphone'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
+            'headers' => [['index' => 'id', 'label' => '#'], ['index' => 'nom', 'label' => 'Nom'], ['index' => 'prenom', 'label' => 'Prénom'], ['index' => 'sexe', 'label' => 'Sexe'], ['index' => 'date_naissance', 'label' => 'Date de naissance'], ['index' => 'age', 'label' => 'Age'], ['index' => 'telephone', 'label' => 'Téléphone'], ['index' => 'photo', 'label' => 'Photo', 'sortable' => false], ['index' => 'statut', 'label' => 'Statut'], ['index' => 'action', 'label' => 'Action', 'sortable' => false]],
             'rows' => $queryy->orderBy(...array_values($this->sort))->paginate($this->quantity)->withQueryString(),
         ];
     }
@@ -60,8 +60,8 @@ new class extends Component {
 <div>
     <x-table selectable wire:model.live="selected" :$headers :$rows :$sort paginate>
         <x-slot:header>
-            <div class="flex items-end justify-between mb-4 gap-4">
-                <div class=" flex gap-4">
+            <div class="flex flex-col gap-4 mb-4 w-full">
+                <div class="flex flex-wrap gap-4 w-full items-center">
                     <x-input icon="magnifying-glass" wire:model.live.debounce.500ms="search" placeholder="Rechercher..."
                         type="search" />
                     <x-select.native wire:model.live="selectedpromotion">
@@ -77,7 +77,11 @@ new class extends Component {
                         @endforeach
                     </x-select.native>
                 </div>
-                <div class="flex gap-2">
+
+                <div class="flex flex-wrap gap-2 w-full items-center">
+                    <x-button x-on:click="$tsui.open.modal('createetudiant')">
+                        <x-codicon-add class="h-5 w-5" /> Nouveau etudiant
+                    </x-button>
                     @if (count($selected) > 0)
                         <x-button
                             class="dark:focus:!ring-darkdeletebutton dark:!bg-darkdeletebutton dark:!text-darkcontenttext dark:hover:!bg-darkdeletebuttonhover"
@@ -85,9 +89,13 @@ new class extends Component {
                             Supprimer sélectionné ({{ count($selected) }})
                         </x-button>
                     @endif
-                    <x-button x-on:click="$tsui.open.modal('createetudiant')">
-                        <x-codicon-add class="h-5 w-5" /> Nouveau etudiant
-                    </x-button>
+                </div>
+
+                <div class="flex flex-wrap gap-2 w-full items-center">
+                    <x-button>Exporter Excel</x-button>
+                    <x-button>Exporter PDF</x-button>
+                    <x-button>Importer etudiants</x-button>
+                    <x-button>Télécharger le modèle Excel</x-button>
                 </div>
             </div>
         </x-slot:header>
@@ -103,6 +111,20 @@ new class extends Component {
                     Modifier
                 </button>
             </div>
+        @endinteract
+        @interact('column_photo', $row)
+            @if($row->photo)
+                <x-avatar :image="Storage::url($row->photo)" />
+            @else
+                <x-avatar text="?" />
+            @endif
+        @endinteract
+        @interact('column_statut', $row)
+            @if($row->est_actif)
+                <x-badge color="green">Actif</x-badge>
+            @else
+                <x-badge color="red">Inactif</x-badge>
+            @endif
         @endinteract
     </x-table>
     <x-modal id="createetudiant" persistent center>
