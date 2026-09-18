@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\EtudiantExportController;
 use App\Http\Controllers\EtudiantPdfController;
+use App\Http\Controllers\EtudiantTemplateController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'verified', 'can:view-etudiants'])->group(function() 
     Route::livewire('/classe/{promotion}', '⚡tableclasse')->name('classes');
     Route::get('etudiants/export', EtudiantExportController::class)->name('etudiants.export');
     Route::get('etudiants/pdf', EtudiantPdfController::class)->name('etudiants.pdf');
+    Route::get('etudiants/template', EtudiantTemplateController::class)->name('etudiants.template');
 });
 Route::middleware(['auth', 'verified', 'can:view-programme'])->group(function() {
     Route::livewire('filieres', '⚡programme')->name('programme');

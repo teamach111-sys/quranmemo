@@ -1,12 +1,16 @@
 <?php
+use App\Imports\EtudiantsImport;
 use App\Models\AnneeScolaire;
 use App\Models\Etudiant;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use TallStackUi\Traits\Interactions;
 new class extends Component {
-    use WithoutUrlPagination, WithPagination;
+    use Interactions, WithFileUploads, WithoutUrlPagination, WithPagination;
     public int $quantity = 10;
     public ?string $search = '';
     public array $selected = [];
@@ -17,6 +21,7 @@ new class extends Component {
     public $selectedannee;
     public $selectedpromotion = null;
     public $selectedgroupe = null;
+    public $importFile = null;
     public function mount()
     {
         $this->selectedannee = session('selected_annee_id') ?? AnneeScolaire::where('est_en_cours', true)->value('id');
@@ -33,6 +38,43 @@ new class extends Component {
     {
         $this->resetPage();
         $this->selected = [];
+    }
+    public function importEtudiants()
+    {
+        $this->validate([
+            'importFile' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        try {
+            $anneeId = $this->selectedannee ?? session('selected_annee_id') ?? AnneeScolaire::where('est_en_cours', true)->value('id');
+
+            $import = new EtudiantsImport(
+                anneeScolaireId: (int) $anneeId,
+                promotionId: $this->selectedpromotion ? (int) $this->selectedpromotion : null,
+                groupeId: $this->selectedgroupe ? (int) $this->selectedgroupe : null,
+            );
+
+            Excel::import($import, $this->importFile->getRealPath());
+
+            $this->importFile = null;
+            $this->resetPage();
+            $this->toast()
+                ->success('Importation réussie', 'Les étudiants ont été importés avec succès.')
+                ->send();
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach (array_slice($failures, 0, 5) as $failure) {
+                $errorMessages[] = "Ligne {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+            $this->toast()
+                ->error('Erreur de validation', implode(' | ', $errorMessages))
+                ->send();
+        } catch (\Exception $e) {
+            $this->toast()
+                ->error('Erreur', 'Une erreur est survenue lors de l\'importation: ' . $e->getMessage())
+                ->send();
+        }
     }
     public function with(): array
     {
@@ -102,8 +144,12 @@ new class extends Component {
                         target="_blank">
                         <x-codicon-file-pdf class="h-5 w-5" /> Exporter PDF
                     </x-button>
-                    <x-button>Importer etudiants</x-button>
-                    <x-button>Télécharger le modèle Excel</x-button>
+                    <x-button tag="a" href="{{ route('etudiants.template') }}" target="_blank">
+                        <x-codicon-file-symlink-file class="h-5 w-5" /> Télécharger le modèle Excel
+                    </x-button>
+                    <x-button x-on:click="$tsui.open.modal('importetudiants')">
+                        <x-codicon-cloud-upload class="h-5 w-5" /> Importer etudiants
+                    </x-button>
                 </div>
             </div>
         </x-slot:header>
@@ -140,5 +186,42 @@ new class extends Component {
     </x-modal>
     <x-modal id="deletedata" center class="dark:!bg-black">
         <livewire:suppmodal />
+    </x-modal>
+    <x-modal id="importetudiants" center>
+        <div class="p-4">
+            <h2 class="text-lg font-bold mb-4">Importer des étudiants</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                Sélectionnez un fichier Excel (.xlsx, .xls) ou CSV contenant les données des étudiants.
+                <a href="{{ route('etudiants.template') }}" class="text-blue-500 underline">Télécharger le modèle</a>
+            </p>
+
+            @if($selectedpromotion || $selectedgroupe)
+                <div class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-sm">
+                    <p class="font-medium text-blue-700 dark:text-blue-300">Les étudiants seront importés avec :</p>
+                    @if($selectedpromotion)
+                        <p class="text-blue-600 dark:text-blue-400">• Promotion :
+                            <strong>{{ \App\Models\Promotion::with('programme')->find($selectedpromotion)?->programme?->nom ?? '—' }}</strong>
+                        </p>
+                    @endif
+                    @if($selectedgroupe)
+                        <p class="text-blue-600 dark:text-blue-400">• Groupe :
+                            <strong>{{ \App\Models\Groupe::find($selectedgroupe)?->nom ?? '—' }}</strong>
+                        </p>
+                    @endif
+                </div>
+            @endif
+
+            <x-upload wire:model="importFile" label="Fichier Excel" accept=".xlsx,.xls,.csv" />
+
+            <div class="flex justify-end gap-2 mt-4">
+                <x-button x-on:click="$tsui.close.modal('importetudiants')">
+                    Annuler
+                </x-button>
+                <x-button wire:click="importEtudiants" wire:loading.attr="disabled">
+                    <span wire:loading.remove wire:target="importEtudiants">Importer</span>
+                    <span wire:loading wire:target="importEtudiants">Importation en cours...</span>
+                </x-button>
+            </div>
+        </div>
     </x-modal>
 </div>
