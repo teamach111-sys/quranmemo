@@ -180,6 +180,10 @@ new class extends Component {
         $query = Etudiant::where('promotion_id', $this->selectpromo)
             ->when($this->selectedgroupe, fn($qq) => $qq->where('groupe_id', $this->selectedgroupe));
 
+        if ($this->selectpromo) {
+            $query = $query->orderBy(...array_values($this->sort));
+        }
+
         return [
             'headers' => [
                 ['index' => 'id', 'label' => '#'],
@@ -192,7 +196,7 @@ new class extends Component {
                 ['index' => 'etat_de_recitation', 'label' => 'Etat de récitation', 'sortable' => false],
                 ['index' => 'observation', 'label' => 'Observation', 'sortable' => false],
             ],
-            'rows' => $query->when($this->selectpromo, fn($q) => $q->orderBy(...array_values($this->sort)))->paginate($this->quantity)->withQueryString(),
+            'rows' => $query->paginate($this->quantity)->withQueryString(),
         ];
     }
 };
