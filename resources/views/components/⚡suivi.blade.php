@@ -1,4 +1,5 @@
 <?php
+use App\Imports\SuiviImport;
 use App\Models\AnneeScolaire;
 use App\Models\Classe;
 use App\Models\Etudiant;
@@ -9,12 +10,14 @@ use App\Models\Sourate;
 use App\Models\Suivi;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
+use Maatwebsite\Excel\Facades\Excel;
 use TallStackUi\Traits\Interactions;
 
 new class extends Component {
-    use Interactions, WithPagination, WithoutUrlPagination;
+    use Interactions, WithFileUploads, WithPagination, WithoutUrlPagination;
     public int $quantity = 10;
     public array $sort = [
         'column' => 'id',
@@ -25,6 +28,8 @@ new class extends Component {
     public $selectedgroupe;
     public $selectedannee;
     public $selectdate;
+    public $importFile = null;
+    public array $selected = [];
 
     public array $sourate = [];
     public array $debut = [];
@@ -46,24 +51,28 @@ new class extends Component {
         $this->selectedannee = $id;
         $this->selectpromo = null;
         $this->selectedgroupe = null;
+        $this->selected = [];
         $this->resetFields();
     }
 
     public function updatedSelectpromo()
     {
         $this->selectedgroupe = null;
+        $this->selected = [];
         $this->loadSuivis();
         $this->resetPage();
     }
 
     public function updatedSelectedgroupe()
     {
+        $this->selected = [];
         $this->loadSuivis();
         $this->resetPage();
     }
 
     public function updatedSelectdate()
     {
+        $this->selected = [];
         $this->loadSuivis();
         $this->resetPage();
     }
@@ -165,6 +174,52 @@ new class extends Component {
         $this->toast()->success('Suivis enregistrés : ' . $saved . ' étudiant(s).')->send();
     }
 
+    public function importSuivis()
+    {
+        $this->validate([
+            'importFile' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+        ]);
+
+        if (!$this->selectpromo || !$this->selectdate || !$this->selectedannee) {
+            $this->toast()->error('Sélectionnez une promotion et une date avant d\'importer.')->send();
+
+            return;
+        }
+
+        try {
+            $import = new SuiviImport(
+                anneeScolaireId: (int) $this->selectedannee,
+                date: $this->selectdate,
+                promotionId: (int) $this->selectpromo,
+                groupeId: $this->selectedgroupe ? (int) $this->selectedgroupe : null,
+            );
+
+            Excel::import($import, $this->importFile->getRealPath());
+
+            $this->importFile = null;
+            $this->selected = [];
+            $this->loadSuivis();
+            $this->resetPage();
+
+            $this->toast()
+                ->success('Importation réussie', 'La liste des suivis a été importée avec succès.')
+                ->send();
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach (array_slice($failures, 0, 5) as $failure) {
+                $errorMessages[] = "Ligne {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+            $this->toast()
+                ->error('Erreur de validation', implode(' | ', $errorMessages))
+                ->send();
+        } catch (\Exception $e) {
+            $this->toast()
+                ->error('Erreur', 'Une erreur est survenue lors de l\'importation: ' . $e->getMessage())
+                ->send();
+        }
+    }
+
     public function render()
     {
         $promotions = Promotion::with('programme', 'anneeScolaire')->forCurrentAnnee()->get();
@@ -198,8 +253,7 @@ new class extends Component {
 
         return [
             'headers' => [
-                ['index' => 'id', 'label' => '#'],
-                ['index' => 'nom', 'label' => 'Etudiant'],
+                ['index' => 'nom', 'label' => 'Etudiant', 'sortable' => false],
                 ['index' => 'sourate', 'label' => 'Sourate', 'sortable' => false],
                 ['index' => 'debut', 'label' => 'Début', 'sortable' => false],
                 ['index' => 'fin', 'label' => 'Fin', 'sortable' => false],
@@ -241,7 +295,30 @@ new class extends Component {
                 @endforeach
             </x-select.native>
         </div>
-        <x-table :$headers :$rows :$sort paginate>
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+            <x-button wire:click="save">
+                <x-codicon-save class="h-5 w-5" /> Enregistrer
+            </x-button>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+            <x-button tag="a"
+                href="{{ route('suivi.export', ['promotion' => $selectpromo ?? '', 'groupe' => $selectedgroupe ?? '', 'date' => $selectdate ?? '']) }}"
+                target="_blank">
+                <x-codicon-desktop-download class="h-5 w-5" /> Exporter Excel
+            </x-button>
+            <x-button tag="a"
+                href="{{ route('suivi.pdf', ['promotion' => $selectpromo ?? '', 'groupe' => $selectedgroupe ?? '', 'date' => $selectdate ?? '']) }}"
+                target="_blank">
+                <x-codicon-file-pdf class="h-5 w-5" /> Exporter PDF
+            </x-button>
+            <x-button tag="a" href="{{ route('suivi.template') }}" target="_blank">
+                <x-codicon-file-symlink-file class="h-5 w-5" /> Télécharger le modèle Excel
+            </x-button>
+            <x-button x-on:click="$tsui.open.modal('importsuivis')">
+                <x-codicon-cloud-upload class="h-5 w-5" /> Importer liste des suivi
+            </x-button>
+        </div>
+        <x-table selectable wire:model.live="selected" :$headers :$rows :$sort paginate>
             @interact('column_nom', $row)
                 <span class="whitespace-nowrap">{{ $row->prenom }} {{ $row->nom }}</span>
             @endinteract
@@ -287,9 +364,39 @@ new class extends Component {
                 <x-input type="text" wire:model="observation.{{ $row->id }}" wire:key="observation-{{ $row->id }}" placeholder="Observation" />
             @endinteract
         </x-table>
-        <div class="mt-3 flex justify-end items-center gap-3">
-            <x-button text="Imprimer" x-on:click="window.print()" />
-            <x-button text="Enregistrer" wire:click="save" />
-        </div>
     </div>
+    <x-modal id="importsuivis" center>
+        <div class="p-4">
+            <h2 class="text-lg font-bold mb-4">Importer la liste des suivis</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                Sélectionnez un fichier Excel (.xlsx, .xls) ou CSV contenant la liste des suivis pour la date
+                sélectionnée. Les étudiants sont identifiés par leur nom et prénom dans la promotion choisie.
+                <a href="{{ route('suivi.template') }}" class="text-blue-500 underline">Télécharger le modèle</a>
+            </p>
+
+            @if($selectpromo)
+                <div class="mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-sm">
+                    <p class="font-medium text-blue-700 dark:text-blue-300">Les suivis seront importés pour :</p>
+                    <p class="text-blue-600 dark:text-blue-400">• Date : <strong>{{ $selectdate }}</strong></p>
+                    @if($selectedgroupe)
+                        <p class="text-blue-600 dark:text-blue-400">• Groupe :
+                            <strong>{{ \App\Models\Groupe::find($selectedgroupe)?->nom ?? '—' }}</strong>
+                        </p>
+                    @endif
+                </div>
+            @endif
+
+            <x-upload wire:model="importFile" label="Fichier Excel" accept=".xlsx,.xls,.csv" />
+
+            <div class="flex justify-end gap-2 mt-4">
+                <x-button x-on:click="$tsui.close.modal('importsuivis')">
+                    Annuler
+                </x-button>
+                <x-button wire:click="importSuivis" wire:loading.attr="disabled">
+                    <span wire:loading.remove wire:target="importSuivis">Importer</span>
+                    <span wire:loading wire:target="importSuivis">Importation en cours...</span>
+                </x-button>
+            </div>
+        </div>
+    </x-modal>
 </div>

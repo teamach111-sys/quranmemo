@@ -5,6 +5,9 @@ declare(strict_types=1);
 use App\Http\Controllers\EtudiantExportController;
 use App\Http\Controllers\EtudiantPdfController;
 use App\Http\Controllers\EtudiantTemplateController;
+use App\Http\Controllers\SuiviExportController;
+use App\Http\Controllers\SuiviPdfController;
+use App\Http\Controllers\SuiviTemplateController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
@@ -17,6 +20,9 @@ Route::middleware(['auth', 'verified', 'can:view-notes'])->group(function() {
     Route::livewire('notes', '⚡note')->name('notes');
     Route::livewire('absence', '⚡absence')->name('absence');
     Route::livewire('suivi', '⚡suivi')->name('suivi');
+    Route::get('suivi/export', SuiviExportController::class)->name('suivi.export');
+    Route::get('suivi/pdf', SuiviPdfController::class)->name('suivi.pdf');
+    Route::get('suivi/template', SuiviTemplateController::class)->name('suivi.template');
 });
 
 Route::middleware(['auth', 'verified', 'can:admin'])->group(function() {
