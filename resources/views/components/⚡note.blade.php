@@ -211,7 +211,9 @@ new class extends Component
             <x-button>
                 <x-codicon-desktop-download class="h-5 w-5" /> Exporter Excel
             </x-button>
-            <x-button>
+            <x-button tag="a"
+                href="{{ route('notes.pdf', ['promotion' => $selectedpromotion ?? '', 'periode' => $selectedperiode ?? '', 'matiere' => $selectedmatiere ?? '', 'groupe' => $selectedgroupe ?? '']) }}"
+                target="_blank">
                 <x-codicon-file-pdf class="h-5 w-5" /> Exporter PDF
             </x-button>
             <x-button>

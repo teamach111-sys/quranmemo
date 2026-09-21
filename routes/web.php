@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\EtudiantExportController;
 use App\Http\Controllers\EtudiantPdfController;
 use App\Http\Controllers\EtudiantTemplateController;
+use App\Http\Controllers\NotePdfController;
 use App\Http\Controllers\SuiviExportController;
 use App\Http\Controllers\SuiviPdfController;
 use App\Http\Controllers\SuiviTemplateController;
@@ -18,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
 Route::middleware(['auth', 'verified', 'can:view-notes'])->group(function() {
     Route::livewire('notes', '⚡note')->name('notes');
+    Route::get('notes/pdf', NotePdfController::class)->name('notes.pdf');
     Route::livewire('absence', '⚡absence')->name('absence');
     Route::livewire('suivi', '⚡suivi')->name('suivi');
     Route::get('suivi/export', SuiviExportController::class)->name('suivi.export');
